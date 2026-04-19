@@ -108,9 +108,7 @@
         background: rgba(6, 6, 8, 0.85);
         backdrop-filter: blur(18px);
         animation: slideDown 0.7s ease both;
-      }
-      @media (max-width: 480px) {
-        nav { padding: 0 1.2rem; }
+        overflow: hidden;
       }
       @keyframes slideDown {
         from { opacity: 0; transform: translateY(-18px); }
@@ -124,6 +122,7 @@
         display: flex;
         align-items: center;
         gap: 8px;
+        flex-shrink: 0;
       }
       .nav-dot {
         width: 6px;
@@ -141,16 +140,14 @@
         display: flex;
         gap: 1.4rem;
         align-items: center;
-      }
-      @media (max-width: 480px) {
-        .nav-links { gap: 0.8rem; }
-        .nav-links a:not(.nav-cta) { display: none; }
+        flex-shrink: 0;
       }
       .nav-links a {
         font-size: 13px;
         color: var(--muted);
         transition: color 0.2s;
         letter-spacing: 0.02em;
+        white-space: nowrap;
       }
       .nav-links a:hover { color: var(--text); }
       .nav-cta {
@@ -162,6 +159,15 @@
         font-weight: 500;
         transition: all 0.25s !important;
         letter-spacing: 0.04em;
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+      /* Mobile: sembunyikan link teks, hanya tampilkan CTA */
+      @media (max-width: 600px) {
+        nav { padding: 0 1.2rem; }
+        .nav-links { gap: 0; }
+        .nav-links a:not(.nav-cta) { display: none; }
+        .nav-cta { padding: 6px 14px; font-size: 11px; }
       }
       .nav-cta:hover { background: var(--accent-dim); border-color: rgba(0, 229, 160, 0.5); }
 
