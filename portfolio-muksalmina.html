@@ -1,0 +1,1303 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Muksalmina Adami</title>
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      :root {
+        --bg: #060608;
+        --s1: #0e0e12;
+        --s2: #16161c;
+        --s3: #1e1e26;
+        --border: rgba(255, 255, 255, 0.06);
+        --border2: rgba(255, 255, 255, 0.12);
+        --text: #f2f2f5;
+        --muted: #666;
+        --muted2: #999;
+        --accent: #00e5a0;
+        --accent2: #00b87d;
+        --accent-dim: rgba(0, 229, 160, 0.12);
+        --accent-dim2: rgba(0, 229, 160, 0.05);
+      }
+      html {
+        scroll-behavior: smooth;
+        cursor: none;
+      }
+      body {
+        font-family:
+          "Segoe UI",
+          system-ui,
+          -apple-system,
+          sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.7;
+        overflow-x: hidden;
+        cursor: none;
+      }
+
+      /* === FIX: Hilangkan garis bawah semua link === */
+      a {
+        text-decoration: none;
+        cursor: none;
+      }
+      button {
+        cursor: none;
+      }
+
+      #cursor {
+        position: fixed;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--accent);
+        pointer-events: none;
+        z-index: 9999;
+        transform: translate(-50%, -50%);
+        transition:
+          transform 0.12s,
+          opacity 0.12s;
+      }
+      #cursor-ring {
+        position: fixed;
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        border: 1.5px solid rgba(0, 229, 160, 0.45);
+        pointer-events: none;
+        z-index: 9998;
+        transform: translate(-50%, -50%);
+        transition:
+          width 0.3s,
+          height 0.3s,
+          border-color 0.3s;
+      }
+      #cursor.clicking {
+        transform: translate(-50%, -50%) scale(0.5);
+      }
+      #cursor-ring.hovering {
+        width: 52px;
+        height: 52px;
+        border-color: rgba(0, 229, 160, 0.9);
+      }
+
+      body::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+        background-image:
+          linear-gradient(rgba(255, 255, 255, 0.018) 1px, transparent 1px),
+          linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0.018) 1px,
+            transparent 1px
+          );
+        background-size: 64px 64px;
+      }
+
+      nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        padding: 0 2.5rem;
+        height: 62px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid var(--border);
+        background: rgba(6, 6, 8, 0.85);
+        backdrop-filter: blur(18px);
+        animation: slideDown 0.7s ease both;
+      }
+      @keyframes slideDown {
+        from {
+          opacity: 0;
+          transform: translateY(-18px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .nav-logo {
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .nav-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--accent);
+        animation: blink 2.5s infinite;
+      }
+      @keyframes blink {
+        0%,
+        100% {
+          opacity: 1;
+          box-shadow: 0 0 0 0 rgba(0, 229, 160, 0.5);
+        }
+        50% {
+          opacity: 0.4;
+          box-shadow: 0 0 0 5px rgba(0, 229, 160, 0);
+        }
+      }
+      .nav-links {
+        display: flex;
+        gap: 1.8rem;
+        align-items: center;
+      }
+      .nav-links a {
+        font-size: 13px;
+        color: var(--muted);
+        transition: color 0.2s;
+        letter-spacing: 0.02em;
+      }
+      .nav-links a:hover {
+        color: var(--text);
+      }
+      .nav-cta {
+        padding: 7px 18px;
+        border-radius: 100px;
+        border: 1px solid rgba(0, 229, 160, 0.25);
+        color: var(--accent) !important;
+        font-size: 12px;
+        font-weight: 500;
+        transition: all 0.25s !important;
+        letter-spacing: 0.04em;
+      }
+      .nav-cta:hover {
+        background: var(--accent-dim);
+        border-color: rgba(0, 229, 160, 0.5);
+      }
+
+      .hero {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 6rem 2rem 5rem;
+        position: relative;
+        z-index: 2;
+      }
+      .hero-glow {
+        position: absolute;
+        width: 700px;
+        height: 700px;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle,
+          rgba(0, 229, 160, 0.055) 0%,
+          transparent 65%
+        );
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -58%);
+        pointer-events: none;
+        animation: glowPulse 5s ease-in-out infinite;
+      }
+      @keyframes glowPulse {
+        0%,
+        100% {
+          opacity: 0.7;
+          transform: translate(-50%, -58%) scale(1);
+        }
+        50% {
+          opacity: 1;
+          transform: translate(-50%, -58%) scale(1.08);
+        }
+      }
+
+      .hero-avatar {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background: var(--s2);
+        border: 2px solid rgba(0, 229, 160, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 30px;
+        font-weight: 700;
+        color: var(--accent);
+        margin: 0 auto 1.8rem;
+        position: relative;
+        animation: fadeUp 0.8s 0.1s ease both;
+        box-shadow:
+          0 0 0 8px rgba(0, 229, 160, 0.035),
+          0 0 0 18px rgba(0, 229, 160, 0.015);
+      }
+      .avatar-ring {
+        position: absolute;
+        inset: -7px;
+        border-radius: 50%;
+        border: 1px solid rgba(0, 229, 160, 0.18);
+        animation: spinRing 14s linear infinite;
+      }
+      .avatar-ring2 {
+        position: absolute;
+        inset: -13px;
+        border-radius: 50%;
+        border: 1px dashed rgba(0, 229, 160, 0.08);
+        animation: spinRing 20s linear infinite reverse;
+      }
+      @keyframes spinRing {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .avatar-ring::before {
+        content: "";
+        position: absolute;
+        top: -3px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--accent);
+      }
+      #avatar-img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+        display: none;
+      }
+      .avatar-upload {
+        position: absolute;
+        bottom: 2px;
+        right: 2px;
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        background: var(--s3);
+        border: 1px solid var(--border2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+      }
+      .avatar-upload:hover {
+        background: var(--accent-dim);
+      }
+      .avatar-upload svg {
+        width: 12px;
+        height: 12px;
+        color: var(--muted2);
+      }
+      .avatar-upload input {
+        display: none;
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 11px;
+        font-weight: 500;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--accent);
+        background: var(--accent-dim2);
+        border: 1px solid rgba(0, 229, 160, 0.14);
+        border-radius: 100px;
+        padding: 6px 16px;
+        margin-bottom: 1.75rem;
+        animation: fadeUp 0.8s 0.25s ease both;
+      }
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(22px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      h1 {
+        font-size: clamp(2.6rem, 7vw, 4.8rem);
+        font-weight: 700;
+        letter-spacing: -0.035em;
+        line-height: 1.1;
+        margin-bottom: 1.2rem;
+        animation: fadeUp 0.8s 0.35s ease both;
+      }
+      .accent-name {
+        color: var(--accent);
+        position: relative;
+        display: inline-block;
+      }
+      .accent-name::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: -3px;
+        width: 100%;
+        height: 2px;
+        background: var(--accent);
+        transform: scaleX(0);
+        transform-origin: left;
+        animation: lineGrow 0.5s 1.3s ease both;
+      }
+      @keyframes lineGrow {
+        to {
+          transform: scaleX(1);
+        }
+      }
+
+      .hero-sub {
+        font-size: 16px;
+        color: var(--muted2);
+        max-width: 460px;
+        margin: 0 auto 2.5rem;
+        line-height: 1.85;
+        animation: fadeUp 0.8s 0.45s ease both;
+      }
+      .cta-row {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        flex-wrap: wrap;
+        animation: fadeUp 0.8s 0.55s ease both;
+      }
+
+      .btn-p {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 26px;
+        border-radius: 100px;
+        background: var(--accent);
+        color: #060608;
+        font-size: 14px;
+        font-weight: 700;
+        border: none;
+        transition: all 0.25s;
+        letter-spacing: 0.02em;
+      }
+      .btn-p:hover {
+        background: #00c98d;
+        transform: translateY(-3px);
+        box-shadow: 0 10px 28px rgba(0, 229, 160, 0.28);
+      }
+      .btn-g {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 26px;
+        border-radius: 100px;
+        background: transparent;
+        color: var(--text);
+        font-size: 14px;
+        font-weight: 500;
+        border: 1px solid var(--border2);
+        transition: all 0.25s;
+      }
+      .btn-g:hover {
+        background: var(--s2);
+        transform: translateY(-3px);
+        border-color: rgba(255, 255, 255, 0.2);
+      }
+
+      /* === FIX: Scroll indicator — z-index agar tampil di atas semua layer === */
+      .scroll-ind {
+        position: absolute;
+        bottom: 1rem;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 7px;
+        animation: fadeUp 0.8s 1s ease both;
+        z-index: 10;
+      }
+      .scroll-ind span {
+        font-size: 10px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      .scroll-line {
+        width: 1px;
+        height: 36px;
+        overflow: hidden;
+        position: relative;
+      }
+      .scroll-line::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 1px;
+        height: 100%;
+        background: linear-gradient(to bottom, var(--accent), transparent);
+        animation: scrollFall 2s ease-in-out infinite;
+      }
+      @keyframes scrollFall {
+        0% {
+          transform: translateY(-100%);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(100%);
+          opacity: 0;
+        }
+      }
+
+      section {
+        padding: 5.5rem 2rem;
+        max-width: 860px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 2;
+      }
+      .stag {
+        font-size: 11px;
+        font-weight: 500;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .stag::before {
+        content: "";
+        width: 18px;
+        height: 1px;
+        background: var(--accent);
+      }
+      .stitle {
+        font-size: 2rem;
+        font-weight: 700;
+        letter-spacing: -0.025em;
+        margin-bottom: 0.75rem;
+        line-height: 1.2;
+      }
+      .ssub {
+        font-size: 15px;
+        color: var(--muted2);
+        margin-bottom: 3rem;
+      }
+      .divider {
+        border: none;
+        border-top: 1px solid var(--border);
+        max-width: 860px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 2;
+      }
+
+      .about-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2.5rem;
+        align-items: start;
+      }
+      @media (max-width: 620px) {
+        .about-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      .about-text {
+        font-size: 15px;
+        color: var(--muted2);
+        line-height: 1.9;
+      }
+      .about-text p + p {
+        margin-top: 1rem;
+      }
+      .about-text strong {
+        color: var(--text);
+        font-weight: 500;
+      }
+      .facts {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .fact {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        padding: 13px 15px;
+        background: var(--s1);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        transition: all 0.3s;
+      }
+      .fact:hover {
+        border-color: rgba(0, 229, 160, 0.25);
+        background: var(--s2);
+        transform: translateX(5px);
+      }
+      .ficon {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        background: var(--accent-dim);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .ficon svg {
+        width: 15px;
+        height: 15px;
+        color: var(--accent);
+      }
+      .flabel {
+        font-size: 10px;
+        color: var(--muted);
+        letter-spacing: 0.04em;
+        margin-bottom: 1px;
+      }
+      .fval {
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--text);
+      }
+
+      .pgrid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(255px, 1fr));
+        gap: 16px;
+      }
+      .pcard {
+        background: var(--s1);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        overflow: hidden;
+        transition: all 0.3s;
+        position: relative;
+      }
+      .pcard::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: 16px;
+        opacity: 0;
+        background: radial-gradient(
+          500px circle at var(--mx, 50%) var(--my, 50%),
+          rgba(0, 229, 160, 0.05),
+          transparent 40%
+        );
+        transition: opacity 0.3s;
+        pointer-events: none;
+        z-index: 0;
+      }
+      .pcard:hover {
+        border-color: rgba(0, 229, 160, 0.22);
+        transform: translateY(-5px);
+        box-shadow: 0 20px 48px rgba(0, 0, 0, 0.5);
+      }
+      .pcard:hover::before {
+        opacity: 1;
+      }
+      .pthumb {
+        width: 100%;
+        height: 155px;
+        background: var(--s2);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+        border-bottom: 1px solid var(--border);
+        position: relative;
+        z-index: 1;
+      }
+      .ticon {
+        width: 42px;
+        height: 42px;
+        border-radius: 11px;
+        background: var(--s3);
+        border: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .ticon svg {
+        width: 19px;
+        height: 19px;
+        color: var(--muted);
+      }
+      .tlabel {
+        font-size: 11px;
+        color: var(--muted);
+      }
+      .pbody {
+        padding: 1.2rem 1.4rem;
+        position: relative;
+        z-index: 1;
+      }
+      .ptype {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: 5px;
+      }
+      .pname {
+        font-size: 15px;
+        font-weight: 600;
+        margin-bottom: 5px;
+        color: var(--text);
+      }
+      .pdesc {
+        font-size: 12px;
+        color: var(--muted);
+        line-height: 1.65;
+        margin-bottom: 0.9rem;
+      }
+      .ptags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+        margin-bottom: 0.9rem;
+      }
+      .ptag {
+        font-size: 10px;
+        padding: 3px 9px;
+        border-radius: 100px;
+        background: var(--s3);
+        border: 1px solid var(--border);
+        color: var(--muted2);
+      }
+      .plink {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--accent);
+        transition: gap 0.2s;
+      }
+      .plink:hover {
+        gap: 9px;
+      }
+      .plink svg {
+        width: 11px;
+        height: 11px;
+      }
+
+      .contact-wrap {
+        max-width: 540px;
+        margin: 0 auto;
+        text-align: center;
+      }
+      .contact-wrap p {
+        font-size: 15px;
+        color: var(--muted2);
+        line-height: 1.85;
+        margin-bottom: 2.5rem;
+      }
+      .clinks {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .citem {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 16px 20px;
+        background: var(--s1);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        transition: all 0.25s;
+        text-align: left;
+      }
+      .citem:hover {
+        border-color: rgba(0, 229, 160, 0.25);
+        background: var(--s2);
+        transform: translateX(5px);
+      }
+      .cicon {
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        background: var(--accent-dim);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .cicon svg {
+        width: 18px;
+        height: 18px;
+        color: var(--accent);
+      }
+      .clabel {
+        font-size: 10px;
+        color: var(--muted);
+        margin-bottom: 2px;
+        letter-spacing: 0.04em;
+      }
+      .cval {
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--text);
+      }
+      .carrow {
+        margin-left: auto;
+        color: var(--muted);
+        transition:
+          transform 0.2s,
+          color 0.2s;
+      }
+      .citem:hover .carrow {
+        transform: translateX(5px);
+        color: var(--accent);
+      }
+
+      footer {
+        text-align: center;
+        padding: 2.5rem;
+        border-top: 1px solid var(--border);
+        font-size: 12px;
+        color: var(--muted);
+        position: relative;
+        z-index: 2;
+        letter-spacing: 0.04em;
+      }
+      footer em {
+        color: var(--accent);
+        font-style: normal;
+      }
+
+      .reveal {
+        opacity: 0;
+        transform: translateY(28px);
+        transition:
+          opacity 0.7s ease,
+          transform 0.7s ease;
+      }
+      .reveal.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .d1 {
+        transition-delay: 0.1s;
+      }
+      .d2 {
+        transition-delay: 0.2s;
+      }
+      .d3 {
+        transition-delay: 0.3s;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="cursor"></div>
+    <div id="cursor-ring"></div>
+
+    <nav>
+      <div class="nav-logo"><span class="nav-dot"></span></div>
+      <div class="nav-links">
+        <a href="#about">Tentang</a>
+        <a href="#projects">Projects</a>
+        <a href="#contact">Kontak</a>
+        <a href="#contact" class="nav-cta">Hubungi Saya</a>
+      </div>
+    </nav>
+
+    <div class="hero">
+      <div class="hero-glow"></div>
+
+      <div class="hero-avatar" id="hero-avatar">
+        <div class="avatar-ring"></div>
+        <div class="avatar-ring2"></div>
+        <!-- Ganti "foto-kamu.jpg" dengan nama file foto kamu (taruh 1 folder dengan file HTML ini) -->
+        <img
+          id="avatar-img"
+          src="saya.jfif"
+          alt="Foto profil"
+          style="display: block"
+          onerror="
+            this.style.display = 'none';
+            document.getElementById('avatar-initials').style.display = 'block';
+          "
+        />
+        <span id="avatar-initials" style="display: none">MA</span>
+      </div>
+
+      <div class="eyebrow">
+        <span class="nav-dot" style="width: 5px; height: 5px"></span>Mahasiswa
+        yang tertarik di dunia programming
+      </div>
+      <h1>Halo, saya<br /><span class="accent-name">Muksalmina Adami</span></h1>
+      <p class="hero-sub">
+        Alumni SMKN 2 Sigli jurusan RPL. Suka belajar ngoding dan membangun
+        hal-hal menarik di web
+      </p>
+      <div class="cta-row">
+        <a href="#projects" class="btn-p">
+          <svg
+            width="15"
+            height="15"
+            viewBox="0 0 16 16"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <rect x="2" y="2" width="5" height="5" rx="1" />
+            <rect x="9" y="2" width="5" height="5" rx="1" />
+            <rect x="2" y="9" width="5" height="5" rx="1" />
+            <rect x="9" y="9" width="5" height="5" rx="1" />
+          </svg>
+          Lihat Projects
+        </a>
+        <a href="#contact" class="btn-g">Hubungi Saya</a>
+      </div>
+
+      <div class="scroll-ind">
+        <span>Scroll</span>
+        <div class="scroll-line"></div>
+      </div>
+    </div>
+
+    <hr class="divider" />
+
+    <section id="about">
+      <div class="reveal">
+        <div class="stag">Tentang saya</div>
+        <h2 class="stitle">Siapa saya?</h2>
+      </div>
+      <div class="about-grid">
+        <div class="about-text reveal d1">
+          <p>
+            Saya pelajar yang
+            <strong>tertarik banget di dunia programming</strong>, khususnya
+            pengembangan web. Dari SMK 2 Sigli jurusan RPL, saya belajar
+            dasar-dasar coding dan mulai mencoba membangun project sendiri.
+          </p>
+          <p>
+            Sekarang saya
+            <strong>sedang kuliah di Universitas Jabal Ghafur</strong> sambil
+            kerja di toko komputer. Kombinasi itu bikin saya makin paham dunia
+            teknologi secara nyata, dan saya terus belajar ngoding di sela-sela
+            kesibukan.
+          </p>
+        </div>
+        <div class="facts reveal d2">
+          <div class="fact">
+            <div class="ficon">
+              <svg
+                viewBox="0 0 16 16"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+              >
+                <path
+                  d="M8 2a4 4 0 100 8A4 4 0 008 2zM2 14c0-3 2.7-4 6-4s6 1 6 4"
+                />
+              </svg>
+            </div>
+            <div>
+              <div class="flabel">Nama</div>
+              <div class="fval">Muksalmina Adami</div>
+            </div>
+          </div>
+          <div class="fact">
+            <div class="ficon">
+              <svg
+                viewBox="0 0 16 16"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+              >
+                <path d="M8 2L1 6l7 4 7-4-7-4zM1 10l7 4 7-4" />
+              </svg>
+            </div>
+            <div>
+              <div class="flabel">Kuliah</div>
+              <div class="fval">Universitas Jabal Ghafur</div>
+            </div>
+          </div>
+          <div class="fact">
+            <div class="ficon">
+              <svg
+                viewBox="0 0 16 16"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+              >
+                <rect x="2" y="4" width="12" height="9" rx="1" />
+                <path d="M5 4V3a1 1 0 011-1h4a1 1 0 011 1v1" />
+              </svg>
+            </div>
+            <div>
+              <div class="flabel">Asal sekolah</div>
+              <div class="fval">SMKN 2 Sigli</div>
+            </div>
+          </div>
+          <div class="fact">
+            <div class="ficon">
+              <svg
+                viewBox="0 0 16 16"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+              >
+                <rect x="1" y="4" width="14" height="9" rx="1.5" />
+                <path d="M4 4V3a1 1 0 011-1h6a1 1 0 011 1v1M6 9h4" />
+              </svg>
+            </div>
+            <div>
+              <div class="flabel">Pekerjaan</div>
+              <div class="fval">Teknisi Komputer</div>
+            </div>
+          </div>
+          <div class="fact">
+            <div class="ficon">
+              <svg
+                viewBox="0 0 16 16"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+              >
+                <circle cx="8" cy="8" r="6" />
+                <path d="M8 5v3l2 2" />
+              </svg>
+            </div>
+            <div>
+              <div class="flabel">Status</div>
+              <div class="fval">Aktif belajar</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider" />
+
+    <section id="projects">
+      <div class="reveal">
+        <div class="stag">Portfolio</div>
+        <h2 class="stitle">Project saya</h2>
+        <p class="ssub">Beberapa Project Yang Telah Saya Buat</p>
+      </div>
+
+      <div class="pgrid" id="pgrid">
+        <div class="pcard reveal d1">
+          <div class="pthumb">
+            <!-- Ganti "project1.jpg" dengan nama file screenshot project kamu -->
+            <img
+              src="project1.jpg"
+              alt="Preview project pertama"
+              style="
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                display: block;
+              "
+              onerror="
+                this.style.display = 'none';
+                this.nextElementSibling.style.display = 'flex';
+              "
+            />
+            <div
+              style="
+                display: none;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 9px;
+                width: 100%;
+                height: 100%;
+              "
+            >
+              <div class="ticon">
+                <svg
+                  viewBox="0 0 20 20"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.4"
+                >
+                  <rect x="2" y="4" width="16" height="12" rx="2" />
+                  <path d="M2 8h16" />
+                </svg>
+              </div>
+              <span class="tlabel">Preview project</span>
+            </div>
+          </div>
+          <div class="pbody">
+            <div class="ptype">Web App</div>
+            <div class="pname">Web Kopi Sederhana</div>
+            <div class="pdesc">Web Kopi Simple</div>
+            <div class="ptags">
+              <span class="ptag">HTML</span><span class="ptag">CSS</span
+              ><span class="ptag">JavaScript</span>
+            </div>
+            <a href="index.html" target="_blank" class="plink">
+              <svg
+                viewBox="0 0 16 16"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                width="11"
+                height="11"
+              >
+                <path
+                  d="M9 2h5v5M14 2L8 8M6 4H3a1 1 0 00-1 1v8a1 1 0 001 1h8a1 1 0 001-1v-3"
+                />
+              </svg>
+              Lihat website
+            </a>
+          </div>
+        </div>
+
+        <div class="pcard reveal d2">
+          <div class="pthumb">
+            <!-- Ganti "project2.jpg" dengan nama file screenshot project kamu -->
+            <img
+              src="project2.jpg"
+              alt="Preview project kedua"
+              style="
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                display: block;
+              "
+              onerror="
+                this.style.display = 'none';
+                this.nextElementSibling.style.display = 'flex';
+              "
+            />
+            <div
+              style="
+                display: none;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 9px;
+                width: 100%;
+                height: 100%;
+              "
+            >
+              <div class="ticon">
+                <svg
+                  viewBox="0 0 20 20"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.4"
+                >
+                  <rect x="3" y="3" width="14" height="14" rx="2" />
+                  <path d="M3 8h14M8 8v9" />
+                </svg>
+              </div>
+              <span class="tlabel">Preview project</span>
+            </div>
+          </div>
+        <!--
+        =============================================
+        CARA TAMBAH PROJECT BARU:
+        Copy blok <div class="pcard"> di bawah ini,
+        paste setelah card terakhir, lalu isi datanya.
+        =============================================
+        <div class="pcard reveal">
+          <div class="pthumb">
+            <img src="NAMA-FILE-SCREENSHOT.jpg" alt="Preview" style="width:100%;height:100%;object-fit:cover;display:block;"
+              onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
+            <div style="display:none;flex-direction:column;align-items:center;justify-content:center;gap:9px;width:100%;height:100%;">
+              <div class="ticon"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="2" y="4" width="16" height="12" rx="2"/><path d="M2 8h16"/></svg></div>
+              <span class="tlabel">Preview project</span>
+            </div>
+          </div>
+          <div class="pbody">
+            <div class="ptype">TIPE (cth: Web App)</div>
+            <div class="pname">NAMA PROJECT</div>
+            <div class="pdesc">DESKRIPSI SINGKAT PROJECT.</div>
+            <div class="ptags">
+              <span class="ptag">TAG1</span>
+              <span class="ptag">TAG2</span>
+            </div>
+            <a href="https://LINK-PROJECT.com" target="_blank" class="plink">
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" width="11" height="11"><path d="M9 2h5v5M14 2L8 8M6 4H3a1 1 0 00-1 1v8a1 1 0 001 1h8a1 1 0 001-1v-3"/></svg>
+              Lihat website
+            </a>
+          </div>
+        </div>
+        -->
+      </div>
+    </section>
+
+    <hr class="divider" />
+
+    <section id="contact">
+      <div class="reveal">
+        <div class="stag">Kontak</div>
+        <h2 class="stitle">Mari terhubung</h2>
+      </div>
+      <div class="contact-wrap reveal d1">
+        <p>
+          Punya project seru atau ingin ngobrol soal teknologi? Jangan ragu
+          hubungi saya lewat salah satu kontak di bawah ini.
+        </p>
+        <div class="clinks">
+          <a href="https://mail.google.com/mail/?view=cm&to=muksalminaadami01@gmail.com" class="citem">
+            <div class="cicon">
+              <svg
+                viewBox="0 0 16 16"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+              >
+                <rect x="2" y="4" width="12" height="9" rx="1.5" />
+                <path d="M2 5l6 4 6-4" />
+              </svg>
+            </div>
+            <div>
+              <div class="clabel">Email</div>
+              <div class="cval">muksalminaadami01@gmail.com</div>
+            </div>
+            <div class="carrow">
+              <svg
+                width="15"
+                height="15"
+                viewBox="0 0 16 16"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+              >
+                <path d="M3 8h10M9 5l4 3-4 3" />
+              </svg>
+            </div>
+          </a>
+          <a href="https://wa.me/6283872035848" target="_blank" class="citem">
+            <div class="cicon">
+              <svg viewBox="0 0 16 16" fill="currentColor">
+                <path
+                  d="M8 1a7 7 0 00-6.07 10.47L1 15l3.63-.93A7 7 0 108 1zm0 1.5a5.5 5.5 0 110 11 5.5 5.5 0 010-11zm-2.3 2.8c-.15 0-.4.06-.6.28-.22.24-.82.8-.82 1.96s.84 2.27.96 2.43c.12.16 1.63 2.56 4 3.48.56.22 1 .34 1.34.43.56.16 1.07.13 1.47.08.45-.06 1.38-.56 1.57-1.1.2-.54.2-1 .14-1.1-.06-.1-.22-.16-.47-.28-.24-.12-1.42-.7-1.64-.78-.22-.08-.38-.12-.54.12-.16.24-.62.78-.76.94-.14.16-.28.18-.52.06-.24-.12-1.02-.38-1.94-1.2-.72-.64-1.2-1.43-1.34-1.67-.14-.24-.02-.37.1-.49.12-.12.24-.3.36-.44.12-.16.16-.28.24-.44.08-.16.04-.3-.02-.44-.06-.12-.54-1.3-.74-1.78-.2-.46-.4-.4-.54-.4z"
+                />
+              </svg>
+            </div>
+            <div>
+              <div class="clabel">WhatsApp</div>
+              <div class="cval">+62 838 7203 5848</div>
+            </div>
+            <div class="carrow">
+              <svg
+                width="15"
+                height="15"
+                viewBox="0 0 16 16"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+              >
+                <path d="M3 8h10M9 5l4 3-4 3" />
+              </svg>
+            </div>
+          </a>
+          <a href="https://github.com/Muksalminaadami" target="_blank" class="citem">
+            <div class="cicon">
+              <svg viewBox="0 0 16 16" fill="currentColor">
+                <path
+                  d="M8 1a7 7 0 00-2.213 13.644c.35.064.478-.152.478-.337 0-.166-.006-.604-.01-1.185-1.947.423-2.358-.938-2.358-.938-.319-.81-.778-1.026-.778-1.026-.636-.435.048-.426.048-.426.703.05 1.072.721 1.072.721.624 1.069 1.636.76 2.035.582.064-.452.244-.76.444-.935-1.554-.177-3.188-.777-3.188-3.458 0-.763.273-1.388.721-1.878-.072-.177-.312-.888.069-1.85 0 0 .588-.189 1.926.718A6.71 6.71 0 018 5.258a6.71 6.71 0 011.758.237c1.337-.907 1.924-.718 1.924-.718.382.962.142 1.673.07 1.85.449.49.72 1.115.72 1.878 0 2.688-1.636 3.28-3.195 3.452.251.216.474.645.474 1.3 0 .938-.009 1.694-.009 1.923 0 .187.127.405.481.336A7.001 7.001 0 008 1z"
+                />
+              </svg>
+            </div>
+            <div>
+              <div class="clabel">GitHub</div>
+              <div class="cval">Muksalminaadami</div>
+            </div>
+            <div class="carrow">
+              <svg
+                width="15"
+                height="15"
+                viewBox="0 0 16 16"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+              >
+                <path d="M3 8h10M9 5l4 3-4 3" />
+              </svg>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <footer>Dibuat oleh <em>Muksalmina Adami</em> &mdash; 2026</footer>
+
+    <script>
+      const cur = document.getElementById("cursor"),
+        ring = document.getElementById("cursor-ring");
+      let mx = 0,
+        my = 0,
+        rx = 0,
+        ry = 0;
+      document.addEventListener("mousemove", (e) => {
+        mx = e.clientX;
+        my = e.clientY;
+        cur.style.left = mx + "px";
+        cur.style.top = my + "px";
+      });
+      (function animR() {
+        rx += (mx - rx) * 0.11;
+        ry += (my - ry) * 0.11;
+        ring.style.left = Math.round(rx) + "px";
+        ring.style.top = Math.round(ry) + "px";
+        requestAnimationFrame(animR);
+      })();
+      document.addEventListener("mousedown", () =>
+        cur.classList.add("clicking"),
+      );
+      document.addEventListener("mouseup", () =>
+        cur.classList.remove("clicking"),
+      );
+
+      function bindHover() {
+        document
+          .querySelectorAll("a,button,.pcard,.fact,.citem")
+          .forEach((el) => {
+            el.onmouseenter = () => ring.classList.add("hovering");
+            el.onmouseleave = () => ring.classList.remove("hovering");
+          });
+      }
+      bindHover();
+
+      document.querySelectorAll(".pcard").forEach((c) => {
+        c.addEventListener("mousemove", (e) => {
+          const r = c.getBoundingClientRect();
+          c.style.setProperty("--mx", e.clientX - r.left + "px");
+          c.style.setProperty("--my", e.clientY - r.top + "px");
+        });
+      });
+
+      const obs = new IntersectionObserver(
+        (entries) =>
+          entries.forEach((e) => {
+            if (e.isIntersecting) e.target.classList.add("visible");
+          }),
+        { threshold: 0.12 },
+      );
+      document.querySelectorAll(".reveal").forEach((el) => obs.observe(el));
+    </script>
+  </body>
+</html>
