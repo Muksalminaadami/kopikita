@@ -1,1549 +1,719 @@
 <!doctype html>
 <html lang="id" data-theme="dark">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Muksalmina Adami — Portfolio</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap"
-      rel="stylesheet"
-    />
-    <style>
-      /* ══════════════════════════════════════════
-     CSS VARIABLES
-    ══════════════════════════════════════════ */
-      :root {
-        --tr: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-      }
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Muksalmina Adami — Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+  :root{--tr:.5s cubic-bezier(.4,0,.2,1)}
 
-      [data-theme="dark"] {
-        --bg: #080c14;
-        --bg2: #0d1524;
-        --bg3: #111d2e;
-        --card: #0f1c30;
-        --bdr: rgba(99, 179, 237, 0.13);
-        --bdr2: rgba(99, 179, 237, 0.38);
-        --tx: #e8f0fc;
-        --txm: #8aa3c5;
-        --txd: #4a6080;
-        --ac: #4fc3f7;
-        --glow: rgba(79, 195, 247, 0.18);
-        --glow2: rgba(79, 195, 247, 0.07);
-        --nav: rgba(8, 12, 20, 0.93);
-        --tagbg: rgba(79, 195, 247, 0.11);
-        --tagtx: #7dd3fc;
-        --sh: 0 8px 40px rgba(0, 0, 0, 0.5);
-      }
-      [data-theme="light"] {
-        --bg: #f0f4fc;
-        --bg2: #e4ecf9;
-        --bg3: #dce6f7;
-        --card: #fff;
-        --bdr: rgba(37, 99, 180, 0.13);
-        --bdr2: rgba(37, 99, 180, 0.38);
-        --tx: #0f1c30;
-        --txm: #3a5680;
-        --txd: #8aa3c5;
-        --ac: #0369a1;
-        --glow: rgba(3, 105, 161, 0.12);
-        --glow2: rgba(3, 105, 161, 0.05);
-        --nav: rgba(240, 244, 252, 0.93);
-        --tagbg: rgba(3, 105, 161, 0.1);
-        --tagtx: #0369a1;
-        --sh: 0 8px 40px rgba(0, 0, 0, 0.1);
-      }
+  [data-theme="dark"]{
+    --bg:#080c14;--bg2:#0d1524;--bg3:#111d2e;--card:#0f1c30;
+    --bdr:rgba(99,179,237,.13);--bdr2:rgba(99,179,237,.38);
+    --tx:#e8f0fc;--txm:#8aa3c5;--txd:#4a6080;
+    --ac:#4fc3f7;--glow:rgba(79,195,247,.18);--glow2:rgba(79,195,247,.07);
+    --navbg:rgba(8,12,20,.96);--tagbg:rgba(79,195,247,.11);--tagtx:#7dd3fc;
+    --sh:0 8px 40px rgba(0,0,0,.5);
+  }
+  [data-theme="light"]{
+    --bg:#f0f4fc;--bg2:#e4ecf9;--bg3:#dce6f7;--card:#fff;
+    --bdr:rgba(37,99,180,.13);--bdr2:rgba(37,99,180,.38);
+    --tx:#0f1c30;--txm:#3a5680;--txd:#8aa3c5;
+    --ac:#0369a1;--glow:rgba(3,105,161,.12);--glow2:rgba(3,105,161,.05);
+    --navbg:rgba(240,244,252,.96);--tagbg:rgba(3,105,161,.1);--tagtx:#0369a1;
+    --sh:0 8px 40px rgba(0,0,0,.1);
+  }
 
-      /* ══════════════════════════════════════════
-     RESET
+  /* RESET */
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;overflow-x:clip;max-width:100vw}
+  body{
+    font-family:"DM Sans",sans-serif;
+    background:var(--bg);color:var(--tx);
+    min-height:100vh;overflow-x:clip;max-width:100vw;
+    transition:background var(--tr),color var(--tr);
+    cursor:none;
+  }
+  @media(max-width:768px){body{cursor:auto}}
+
+  /* CURSOR */
+  .cur,.cur-ring{position:fixed;border-radius:50%;pointer-events:none;transform:translate(-50%,-50%)}
+  .cur{width:11px;height:11px;background:var(--ac);z-index:9999;transition:width .18s,height .18s;mix-blend-mode:screen}
+  .cur-ring{width:34px;height:34px;border:1.5px solid var(--ac);z-index:9998;opacity:.45;transition:width .35s,height .35s,opacity .35s}
+  .cur.hov{width:20px;height:20px}
+  .cur-ring.hov{width:54px;height:54px;opacity:.25}
+  @media(max-width:768px){.cur,.cur-ring{display:none}}
+
+  /* BG MESH */
+  .bg-mesh{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+  .bg-mesh::before{
+    content:"";position:absolute;width:65vw;height:65vw;
+    background:radial-gradient(circle,var(--glow) 0%,transparent 70%);
+    top:-15%;right:-15%;border-radius:50%;animation:mf 14s ease-in-out infinite;
+  }
+  .bg-mesh::after{
+    content:"";position:absolute;width:45vw;height:45vw;
+    background:radial-gradient(circle,var(--glow2) 0%,transparent 70%);
+    bottom:5%;left:-10%;border-radius:50%;animation:mf 18s ease-in-out infinite reverse;
+  }
+  @keyframes mf{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(3%,4%) scale(1.07)}}
+
+  /* ══════════════════════════════════════════
+     NAVBAR — overflow:visible agar dropdown mobile tidak terpotong
   ══════════════════════════════════════════ */
-      *,
-      *::before,
-      *::after {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
-      html {
-        scroll-behavior: smooth;
-        /* ROOT FIX: paksa tidak ada horizontal scroll sama sekali */
-        overflow-x: clip;
-        max-width: 100vw;
-      }
-      body {
-        font-family: "DM Sans", sans-serif;
-        background: var(--bg);
-        color: var(--tx);
-        min-height: 100vh;
-        overflow-x: clip;
-        max-width: 100vw;
-        transition:
-          background var(--tr),
-          color var(--tr);
-        cursor: none;
-      }
-      @media (max-width: 768px) {
-        body {
-          cursor: auto;
-        }
-      }
+  nav{
+    position:fixed;top:0;left:0;
+    width:100%;max-width:100vw;
+    z-index:300;
+    height:62px;
+    padding:0 clamp(16px,4vw,48px);
+    display:flex;align-items:center;justify-content:space-between;
+    background:var(--navbg);
+    backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
+    border-bottom:1px solid var(--bdr);
+    transition:background var(--tr),border-color var(--tr);
+    /* ⚠️ JANGAN overflow:hidden — akan memotong dropdown mobile */
+    overflow:visible;
+  }
 
-      /* ══════════════════════════════════════════
-     CURSOR (desktop only)
+  .nav-logo{
+    font-family:"Syne",sans-serif;font-weight:800;font-size:1.15rem;
+    color:var(--ac);text-decoration:none;letter-spacing:-.02em;
+    flex-shrink:0;white-space:nowrap;
+  }
+  .nav-logo em{color:var(--tx);font-style:normal}
+
+  .nav-links{
+    display:flex;align-items:center;
+    gap:clamp(18px,3vw,40px);list-style:none;
+  }
+  .nav-links a{
+    font-size:.875rem;font-weight:500;color:var(--txm);
+    text-decoration:none;letter-spacing:.02em;
+    transition:color .25s;position:relative;
+  }
+  .nav-links a::after{
+    content:"";position:absolute;bottom:-3px;left:0;
+    width:0;height:1.5px;background:var(--ac);transition:width .3s;
+  }
+  .nav-links a:hover{color:var(--tx)}
+  .nav-links a:hover::after{width:100%}
+
+  .nav-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
+
+  /* Theme toggle */
+  .tt{
+    width:44px;height:24px;background:var(--bg3);
+    border:1px solid var(--bdr);border-radius:50px;
+    cursor:pointer;position:relative;flex-shrink:0;
+    transition:background var(--tr),border-color var(--tr);
+  }
+  .tt::before{
+    content:"";position:absolute;top:3px;left:3px;
+    width:16px;height:16px;background:var(--ac);border-radius:50%;
+    transition:transform .4s cubic-bezier(.34,1.56,.64,1);
+    box-shadow:0 0 8px var(--glow);
+  }
+  [data-theme="light"] .tt::before{transform:translateX(20px)}
+  .tt:hover{border-color:var(--ac)}
+  .ti{font-size:.6rem;position:absolute;top:50%;transform:translateY(-50%);transition:opacity .3s;line-height:1}
+  .ti.sun{right:4px;opacity:0}
+  .ti.moon{left:4px;opacity:1}
+  [data-theme="light"] .ti.sun{opacity:1}
+  [data-theme="light"] .ti.moon{opacity:0}
+
+  /* ══════════════════════════════════════════
+     HAMBURGER BUTTON
+     display:none di desktop, display:flex di mobile
   ══════════════════════════════════════════ */
-      .cur,
-      .cur-ring {
-        position: fixed;
-        border-radius: 50%;
-        pointer-events: none;
-        transform: translate(-50%, -50%);
-      }
-      .cur {
-        width: 11px;
-        height: 11px;
-        background: var(--ac);
-        z-index: 9999;
-        transition:
-          width 0.18s,
-          height 0.18s;
-        mix-blend-mode: screen;
-      }
-      .cur-ring {
-        width: 34px;
-        height: 34px;
-        border: 1.5px solid var(--ac);
-        z-index: 9998;
-        opacity: 0.45;
-        transition:
-          width 0.35s,
-          height 0.35s,
-          opacity 0.35s;
-      }
-      .cur.hov {
-        width: 20px;
-        height: 20px;
-      }
-      .cur-ring.hov {
-        width: 54px;
-        height: 54px;
-        opacity: 0.25;
-      }
-      @media (max-width: 768px) {
-        .cur,
-        .cur-ring {
-          display: none;
-        }
-      }
+  .hb{
+    /* Default sembunyi di desktop */
+    display:none;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    gap:5px;
+    cursor:pointer;
+    /* Ukuran touch-friendly */
+    width:40px;height:40px;
+    padding:8px;
+    background:none;
+    border:none;
+    flex-shrink:0;
+    /* Pastikan bisa diklik */
+    position:relative;
+    z-index:1;
+  }
+  .hb span{
+    display:block;
+    width:22px;height:2px;
+    background:var(--tx);
+    border-radius:2px;
+    transition:transform .28s ease,opacity .2s ease;
+    transform-origin:center;
+  }
+  /* Animasi X saat open */
+  .hb.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+  .hb.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+  .hb.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
 
-      /* ══════════════════════════════════════════
-     BG MESH
+  /* ══════════════════════════════════════════
+     MOBILE STYLES
   ══════════════════════════════════════════ */
-      .bg-mesh {
-        position: fixed;
-        inset: 0;
-        pointer-events: none;
-        z-index: 0;
-        overflow: hidden;
-      }
-      .bg-mesh::before {
-        content: "";
-        position: absolute;
-        width: 65vw;
-        height: 65vw;
-        background: radial-gradient(circle, var(--glow) 0%, transparent 70%);
-        top: -15%;
-        right: -15%;
-        border-radius: 50%;
-        animation: mf 14s ease-in-out infinite;
-      }
-      .bg-mesh::after {
-        content: "";
-        position: absolute;
-        width: 45vw;
-        height: 45vw;
-        background: radial-gradient(circle, var(--glow2) 0%, transparent 70%);
-        bottom: 5%;
-        left: -10%;
-        border-radius: 50%;
-        animation: mf 18s ease-in-out infinite reverse;
-      }
-      @keyframes mf {
-        0%,
-        100% {
-          transform: translate(0, 0) scale(1);
-        }
-        50% {
-          transform: translate(3%, 4%) scale(1.07);
-        }
-      }
+  @media(max-width:768px){
 
-      /* ══════════════════════════════════════════
-     NAVBAR — fully fixed
-  ══════════════════════════════════════════ */
-      nav {
-        position: fixed;
-        top: 0;
-        left: 0;
-        /* Lebar penuh, tidak ada kanan negatif */
-        width: 100%;
-        max-width: 100vw;
-        z-index: 300;
-        height: 62px;
-        /* Padding yang aman: tidak pakai % di mobile */
-        padding: 0 clamp(16px, 4vw, 48px);
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        background: var(--nav);
-        backdrop-filter: blur(22px);
-        -webkit-backdrop-filter: blur(22px);
-        border-bottom: 1px solid var(--bdr);
-        transition:
-          background var(--tr),
-          border-color var(--tr);
-        /* Tidak ada overflow apapun di nav */
-        overflow: hidden;
-      }
+    /* Tampilkan hamburger */
+    .hb{display:flex !important}
 
-      .nav-logo {
-        font-family: "Syne", sans-serif;
-        font-weight: 800;
-        font-size: 1.15rem;
-        color: var(--ac);
-        text-decoration: none;
-        letter-spacing: -0.02em;
-        flex-shrink: 0;
-        white-space: nowrap;
-      }
-      .nav-logo em {
-        color: var(--tx);
-        font-style: normal;
-      }
-
-      /* Desktop links */
-      .nav-links {
-        display: flex;
-        align-items: center;
-        gap: clamp(18px, 3vw, 40px);
-        list-style: none;
-      }
-      .nav-links a {
-        font-size: 0.875rem;
-        font-weight: 500;
-        color: var(--txm);
-        text-decoration: none;
-        letter-spacing: 0.02em;
-        transition: color 0.25s;
-        position: relative;
-      }
-      .nav-links a::after {
-        content: "";
-        position: absolute;
-        bottom: -3px;
-        left: 0;
-        width: 0;
-        height: 1.5px;
-        background: var(--ac);
-        transition: width 0.3s;
-      }
-      .nav-links a:hover {
-        color: var(--tx);
-      }
-      .nav-links a:hover::after {
-        width: 100%;
-      }
-
-      .nav-right {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        flex-shrink: 0;
-      }
-
-      /* Theme toggle */
-      .tt {
-        width: 44px;
-        height: 24px;
-        background: var(--bg3);
-        border: 1px solid var(--bdr);
-        border-radius: 50px;
-        cursor: pointer;
-        position: relative;
-        flex-shrink: 0;
-        transition:
-          background var(--tr),
-          border-color var(--tr);
-      }
-      .tt::before {
-        content: "";
-        position: absolute;
-        top: 3px;
-        left: 3px;
-        width: 16px;
-        height: 16px;
-        background: var(--ac);
-        border-radius: 50%;
-        transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-        box-shadow: 0 0 8px var(--glow);
-      }
-      [data-theme="light"] .tt::before {
-        transform: translateX(20px);
-      }
-      .tt:hover {
-        border-color: var(--ac);
-      }
-      .ti {
-        font-size: 0.6rem;
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        transition: opacity 0.3s;
-        line-height: 1;
-      }
-      .ti.sun {
-        right: 4px;
-        opacity: 0;
-      }
-      .ti.moon {
-        left: 4px;
-        opacity: 1;
-      }
-      [data-theme="light"] .ti.sun {
-        opacity: 1;
-      }
-      [data-theme="light"] .ti.moon {
-        opacity: 0;
-      }
-
-      /* Hamburger */
-      .hb {
-        display: none;
-        flex-direction: column;
-        justify-content: center;
-        gap: 5px;
-        cursor: pointer;
-        width: 36px;
-        height: 36px;
-        padding: 6px;
-        background: none;
-        border: none;
-        flex-shrink: 0;
-      }
-      .hb span {
-        display: block;
-        width: 22px;
-        height: 2px;
-        background: var(--tx);
-        border-radius: 2px;
-        transition: all 0.3s ease;
-        transform-origin: center;
-      }
-      .hb.open span:nth-child(1) {
-        transform: translateY(7px) rotate(45deg);
-      }
-      .hb.open span:nth-child(2) {
-        opacity: 0;
-        transform: scaleX(0);
-      }
-      .hb.open span:nth-child(3) {
-        transform: translateY(-7px) rotate(-45deg);
-      }
-
-      /* ══════════════════════════════════════════
-     MOBILE NAV DROPDOWN — fully fixed
-  ══════════════════════════════════════════ */
-      @media (max-width: 768px) {
-        .hb {
-          display: flex;
-        }
-        .nav-links {
-          position: fixed;
-          top: 62px;
-          left: 0;
-          /* Kunci width ke 100vw agar tidak overflow */
-          width: 100vw;
-          max-width: 100vw;
-          background: var(--nav);
-          backdrop-filter: blur(24px);
-          -webkit-backdrop-filter: blur(24px);
-          border-bottom: 1px solid var(--bdr);
-          flex-direction: column;
-          align-items: flex-start;
-          padding: 18px 24px 26px;
-          gap: 0;
-          /* Sembunyi */
-          transform: translateY(-8px);
-          opacity: 0;
-          visibility: hidden;
-          pointer-events: none;
-          transition:
-            transform 0.32s cubic-bezier(0.4, 0, 0.2, 1),
-            opacity 0.28s,
-            visibility 0.28s;
-          z-index: 299;
-        }
-        .nav-links.open {
-          transform: translateY(0);
-          opacity: 1;
-          visibility: visible;
-          pointer-events: auto;
-        }
-        .nav-links li {
-          width: 100%;
-        }
-        .nav-links a {
-          display: block;
-          font-size: 1rem;
-          font-weight: 600;
-          padding: 13px 0;
-          border-bottom: 1px solid var(--bdr);
-          color: var(--txm);
-        }
-        .nav-links a:hover {
-          color: var(--ac);
-        }
-        .nav-links li:last-child a {
-          border-bottom: none;
-        }
-      }
-
-      /* ══════════════════════════════════════════
-     MAIN
-  ══════════════════════════════════════════ */
-      main {
-        position: relative;
-        z-index: 1;
-        padding-top: 62px;
-        width: 100%;
-        max-width: 100vw;
-        overflow-x: clip;
-      }
-      section {
-        padding: clamp(56px, 9vw, 110px) clamp(16px, 5vw, 5%);
-        max-width: 1180px;
-        margin: 0 auto;
-        width: 100%;
-      }
-
-      /* Section labels */
-      .slabel {
-        font-family: "Syne", sans-serif;
-        font-size: 0.7rem;
-        font-weight: 700;
-        letter-spacing: 0.22em;
-        text-transform: uppercase;
-        color: var(--ac);
-        margin-bottom: 10px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-      }
-      .slabel::before {
-        content: "";
-        display: block;
-        width: 26px;
-        height: 1.5px;
-        background: var(--ac);
-        flex-shrink: 0;
-      }
-      .stitle {
-        font-family: "Syne", sans-serif;
-        font-size: clamp(1.8rem, 4vw, 2.9rem);
-        font-weight: 800;
-        line-height: 1.1;
-        letter-spacing: -0.03em;
-        margin-bottom: 14px;
-      }
-      .ssub {
-        font-size: 1rem;
-        color: var(--txm);
-        max-width: 520px;
-        line-height: 1.7;
-        margin-bottom: 44px;
-      }
-
-      /* ══════════════════════════════════════════
-     HERO  ← ROOT FIX NAMA TERPOTONG
-  ══════════════════════════════════════════ */
-      #hero {
-        min-height: calc(100vh - 62px);
-        display: flex;
-        align-items: center;
-        padding: clamp(36px, 6vw, 80px) clamp(16px, 5vw, 5%);
-        position: relative;
-        overflow: hidden;
-        width: 100%;
-        max-width: 100vw;
-      }
-
-      .hero-inner {
-        display: flex;
-        align-items: center;
-        gap: clamp(32px, 5vw, 64px);
-        width: 100%;
-        max-width: 1100px;
-      }
-
-      /* ── Foto ── */
-      .photo-wrap {
-        flex-shrink: 0;
-        position: relative;
-        animation: fup 0.8s 0.3s ease both;
-      }
-      .photo-ring {
-        position: absolute;
-        inset: -10px;
-        border-radius: 50%;
-        border: 1px dashed var(--bdr2);
-        animation: sp 22s linear infinite;
-        pointer-events: none;
-      }
-      @keyframes sp {
-        from {
-          transform: rotate(0);
-        }
-        to {
-          transform: rotate(360deg);
-        }
-      }
-      .photo {
-        width: 190px;
-        height: 190px;
-        border-radius: 50%;
-        border: 3px solid var(--ac);
-        object-fit: cover;
-        display: block;
-        box-shadow:
-          0 0 36px var(--glow),
-          0 0 72px var(--glow2);
-      }
-
-      /* ── Konten hero ── */
-      .hero-txt {
-        /* FIX KUNCI: min-width:0 agar flex child tidak overflow,
-       flex:1 agar mengisi sisa ruang */
-        flex: 1;
-        min-width: 0;
-        position: relative;
-        z-index: 2;
-      }
-
-      .badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        font-size: 0.74rem;
-        font-weight: 600;
-        color: var(--ac);
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
-        background: var(--tagbg);
-        border: 1px solid var(--bdr);
-        padding: 5px 14px;
-        border-radius: 50px;
-        margin-bottom: 22px;
-        animation: fup 0.6s ease both;
-        white-space: nowrap;
-      }
-      .badge .dot {
-        width: 6px;
-        height: 6px;
-        background: var(--ac);
-        border-radius: 50%;
-        animation: bl 2s ease-in-out infinite;
-        flex-shrink: 0;
-      }
-      @keyframes bl {
-        0%,
-        100% {
-          opacity: 1;
-        }
-        50% {
-          opacity: 0.25;
-        }
-      }
-
-      /* ══════════════════════════════════════════
-     NAMA — FIX TERPOTONG DI SEMUA UKURAN LAYAR
-     
-     Masalah: font-size terlalu besar relatif terhadap
-     lebar container yang sudah dikurangi foto.
-     
-     Solusi:
-     1. Gunakan font-size yang lebih kecil di desktop
-        karena ada foto di sebelah kiri (~190px + gap)
-     2. Di mobile pakai ukuran yang pas untuk 100% lebar
-     3. white-space: nowrap dengan overflow:visible agar
-        tidak wrap di tengah kata, dan font-size
-        dikontrol lewat clamp yang memperhitungkan 
-        container bukan viewport penuh
-  ══════════════════════════════════════════ */
-      .hero-name {
-        font-family: "Syne", sans-serif;
-        font-weight: 800;
-        line-height: 1;
-        letter-spacing: -0.03em;
-        margin-bottom: 18px;
-        animation: fup 0.6s 0.1s ease both;
-
-        /* FIX UTAMA:
-       - Desktop punya foto 190px + gap 48px = ~238px kurang dari viewport
-       - Gunakan vw berbasis sisa container, bukan viewport penuh
-       - clamp(min, preferred, max)
-       - preferred = 5.5vw cukup untuk layar 1280px → ~70px, nama muat 1 baris
-       - max = 4rem agar tidak terlalu besar di layar kecil
+    /* ── DROPDOWN MENU ──
+       Key fixes:
+       1. z-index:500 > nav(300) agar tidak tertutup
+       2. visibility + pointer-events untuk toggle yang benar
+       3. transition delay visibility: 0s saat buka, delay saat tutup
+       4. TIDAK memakai overflow:hidden pada ancestor manapun
     */
-        font-size: clamp(2rem, 5.5vw, 4rem);
+    .nav-links{
+      position:fixed;
+      top:62px;
+      left:0;
+      width:100vw;
+      max-width:100vw;
+      /* z-index LEBIH TINGGI dari nav */
+      z-index:500;
+      background:var(--navbg);
+      backdrop-filter:blur(24px);
+      -webkit-backdrop-filter:blur(24px);
+      border-bottom:1px solid var(--bdr);
+      flex-direction:column;
+      align-items:flex-start;
+      padding:16px 24px 24px;
+      gap:0;
+      /* ── State tertutup ── */
+      transform:translateY(-10px);
+      opacity:0;
+      visibility:hidden;
+      pointer-events:none;
+      /* Saat tutup: visibility delay sampai animasi selesai */
+      transition:
+        transform .3s cubic-bezier(.4,0,.2,1),
+        opacity .25s ease,
+        visibility 0s .3s;
+    }
 
-        /* JANGAN word-break/overflow-wrap — biarkan teks mengalir natural */
-        word-break: normal;
-        overflow-wrap: normal;
-        hyphens: none;
-      }
+    /* ── State terbuka ── */
+    .nav-links.open{
+      transform:translateY(0);
+      opacity:1;
+      visibility:visible;
+      pointer-events:auto;
+      /* Saat buka: visibility langsung, tanpa delay */
+      transition:
+        transform .3s cubic-bezier(.4,0,.2,1),
+        opacity .25s ease,
+        visibility 0s 0s;
+    }
 
-      /* Dua baris eksplisit: setiap baris wrap otomatis berdasarkan ukuran */
-      .hero-name .n1,
-      .hero-name .n2 {
-        display: block;
-      }
-      .hero-name .n1 {
-        animation: su 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
-      }
-      .hero-name .n2 {
-        animation: su 0.8s 0.12s cubic-bezier(0.16, 1, 0.3, 1) both;
-        color: var(--ac);
-      }
+    .nav-links li{width:100%}
+    .nav-links a{
+      display:block;
+      font-size:1rem;font-weight:600;
+      padding:14px 0;
+      border-bottom:1px solid var(--bdr);
+      color:var(--txm);
+      /* Pastikan bisa diklik */
+      pointer-events:auto;
+    }
+    .nav-links a:hover{color:var(--ac)}
+    .nav-links li:last-child a{border-bottom:none}
+  }
 
-      @keyframes su {
-        from {
-          transform: translateY(28px);
-          opacity: 0;
-        }
-        to {
-          transform: translateY(0);
-          opacity: 1;
-        }
-      }
-      @keyframes fup {
-        from {
-          transform: translateY(22px);
-          opacity: 0;
-        }
-        to {
-          transform: translateY(0);
-          opacity: 1;
-        }
-      }
+  /* MAIN */
+  main{
+    position:relative;z-index:1;
+    padding-top:62px;
+    width:100%;max-width:100vw;overflow-x:clip;
+  }
+  section{
+    padding:clamp(56px,9vw,110px) clamp(16px,5vw,5%);
+    max-width:1180px;margin:0 auto;width:100%;
+  }
 
-      .tagline {
-        font-size: clamp(0.88rem, 1.2vw, 1rem);
-        color: var(--txm);
-        line-height: 1.72;
-        margin-bottom: 24px;
-        animation: fup 0.6s 0.28s ease both;
-      }
-      .hero-info {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 6px 14px;
-        margin-bottom: 28px;
-        animation: fup 0.6s 0.38s ease both;
-      }
-      .hii {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        font-size: 0.85rem;
-        color: var(--txm);
-      }
-      .hii .ico {
-        color: var(--ac);
-        font-size: 0.9rem;
-      }
-      .hero-cta {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-        animation: fup 0.6s 0.48s ease both;
-      }
+  /* Section labels */
+  .slabel{
+    font-family:"Syne",sans-serif;font-size:.7rem;font-weight:700;
+    letter-spacing:.22em;text-transform:uppercase;color:var(--ac);
+    margin-bottom:10px;display:flex;align-items:center;gap:10px;
+  }
+  .slabel::before{content:"";display:block;width:26px;height:1.5px;background:var(--ac);flex-shrink:0}
+  .stitle{
+    font-family:"Syne",sans-serif;
+    font-size:clamp(1.8rem,4vw,2.9rem);
+    font-weight:800;line-height:1.1;letter-spacing:-.03em;margin-bottom:14px;
+  }
+  .ssub{font-size:1rem;color:var(--txm);max-width:520px;line-height:1.7;margin-bottom:44px}
 
-      /* ══════════════════════════════════════════
-     MOBILE HERO — perbaikan menyeluruh
+  /* ══════════════════════════════════════════
+     HERO
   ══════════════════════════════════════════ */
-      @media (max-width: 768px) {
-        #hero {
-          padding: 32px clamp(16px, 5vw, 24px) 44px;
-          align-items: flex-start;
-          min-height: auto;
-        }
-        .hero-inner {
-          flex-direction: column;
-          gap: 0;
-          align-items: center;
-          width: 100%;
-        }
-        /* Foto di atas */
-        .photo-wrap {
-          order: 1;
-          margin-bottom: 20px;
-        }
-        .hero-txt {
-          order: 2;
-          width: 100%;
-          flex: none;
-          text-align: center;
-        }
+  #hero{
+    min-height:calc(100vh - 62px);
+    display:flex;align-items:center;
+    padding:clamp(36px,6vw,80px) clamp(16px,5vw,5%);
+    position:relative;overflow:hidden;
+    width:100%;max-width:100vw;
+  }
+  .hero-inner{
+    display:flex;align-items:center;
+    gap:clamp(32px,5vw,64px);
+    width:100%;max-width:1100px;
+  }
 
-        /* Foto lebih kecil di mobile */
-        .photo {
-          width: 110px;
-          height: 110px;
-        }
-        .photo-ring {
-          inset: -8px;
-        }
+  /* Foto */
+  .photo-wrap{flex-shrink:0;position:relative;animation:fup .8s .3s ease both}
+  .photo-ring{
+    position:absolute;inset:-10px;border-radius:50%;
+    border:1px dashed var(--bdr2);
+    animation:sp 22s linear infinite;pointer-events:none;
+  }
+  @keyframes sp{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+  .photo{
+    width:190px;height:190px;border-radius:50%;
+    border:3px solid var(--ac);object-fit:cover;display:block;
+    box-shadow:0 0 36px var(--glow),0 0 72px var(--glow2);
+  }
 
-        /* FIX NAMA DI MOBILE:
-       Pada mobile container = 100vw - 32px padding
-       Nama "Muksalmina" = 10 karakter, perlu ~font-size*6 lebar
-       clamp(1.9rem, 8vw, 2.5rem) → di 390px = 31px = total ~186px → MUAT
-    */
-        .hero-name {
-          font-size: clamp(1.9rem, 8.5vw, 2.6rem);
-          letter-spacing: -0.02em;
-          margin-bottom: 12px;
-          text-align: center;
-        }
+  /* Teks hero */
+  .hero-txt{flex:1;min-width:0;position:relative;z-index:2}
 
-        .badge {
-          font-size: 0.63rem;
-          letter-spacing: 0.07em;
-          padding: 5px 11px;
-          margin-bottom: 14px;
-        }
-        .tagline {
-          font-size: 0.88rem;
-          margin-bottom: 18px;
-          text-align: center;
-        }
-        .hero-info {
-          justify-content: center;
-          gap: 5px 12px;
-          margin-bottom: 18px;
-        }
-        .hii {
-          font-size: 0.77rem;
-        }
-        .hero-cta {
-          justify-content: center;
-        }
-        .btn-p,
-        .btn-o {
-          flex: 1;
-          min-width: 128px;
-          justify-content: center;
-          padding: 12px 12px;
-          font-size: 0.8rem;
-        }
-      }
+  .badge{
+    display:inline-flex;align-items:center;gap:8px;
+    font-size:.74rem;font-weight:600;color:var(--ac);
+    letter-spacing:.1em;text-transform:uppercase;
+    background:var(--tagbg);border:1px solid var(--bdr);
+    padding:5px 14px;border-radius:50px;margin-bottom:22px;
+    animation:fup .6s ease both;white-space:nowrap;
+  }
+  .badge .dot{
+    width:6px;height:6px;background:var(--ac);border-radius:50%;
+    animation:bl 2s ease-in-out infinite;flex-shrink:0;
+  }
+  @keyframes bl{0%,100%{opacity:1}50%{opacity:.25}}
 
-      /* Extra kecil (≤380px) */
-      @media (max-width: 380px) {
-        .hero-name {
-          font-size: clamp(1.7rem, 8vw, 1.9rem);
-        }
-        .badge {
-          font-size: 0.6rem;
-          padding: 4px 10px;
-          white-space: normal;
-          text-align: center;
-        }
-      }
+  /* Nama — dikontrol per breakpoint */
+  .hero-name{
+    font-family:"Syne",sans-serif;font-weight:800;
+    line-height:1.0;letter-spacing:-.03em;margin-bottom:18px;
+    animation:fup .6s .1s ease both;
+    word-break:normal;overflow-wrap:normal;hyphens:none;
+    font-size:clamp(2rem,5.5vw,4rem);
+  }
+  .hero-name .n1,.hero-name .n2{display:block}
+  .hero-name .n1{animation:su .8s cubic-bezier(.16,1,.3,1) both}
+  .hero-name .n2{animation:su .8s .12s cubic-bezier(.16,1,.3,1) both;color:var(--ac)}
 
-      /* Buttons */
-      .btn-p {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        padding: 13px 26px;
-        background: var(--ac);
-        color: var(--bg);
-        font-family: "Syne", sans-serif;
-        font-size: 0.875rem;
-        font-weight: 700;
-        letter-spacing: 0.05em;
-        border-radius: 8px;
-        text-decoration: none;
-        border: none;
-        cursor: pointer;
-        transition: all 0.3s;
-        position: relative;
-        overflow: hidden;
-        white-space: nowrap;
-      }
-      .btn-p::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: rgba(255, 255, 255, 0.2);
-        transform: translateX(-100%);
-        transition: transform 0.4s;
-      }
-      .btn-p:hover::before {
-        transform: translateX(100%);
-      }
-      .btn-p:hover {
-        box-shadow:
-          0 0 28px var(--glow),
-          0 4px 16px rgba(0, 0, 0, 0.2);
-        transform: translateY(-2px);
-      }
-      .btn-o {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        padding: 12px 26px;
-        background: transparent;
-        color: var(--tx);
-        font-family: "Syne", sans-serif;
-        font-size: 0.875rem;
-        font-weight: 600;
-        letter-spacing: 0.05em;
-        border-radius: 8px;
-        text-decoration: none;
-        border: 1.5px solid var(--bdr);
-        cursor: pointer;
-        transition: all 0.3s;
-        white-space: nowrap;
-      }
-      .btn-o:hover {
-        border-color: var(--ac);
-        color: var(--ac);
-        transform: translateY(-2px);
-      }
+  @keyframes su{from{transform:translateY(28px);opacity:0}to{transform:translateY(0);opacity:1}}
+  @keyframes fup{from{transform:translateY(22px);opacity:0}to{transform:translateY(0);opacity:1}}
 
-      /* ══════════════════════════════════════════
-     DESKTOP: font nama lebih terkontrol
-     Pada lebar 900px-1300px foto 190px + gap ~48px
-     = container hero-txt ~662px-1062px
-     clamp(2rem,5.5vw,4rem) sudah cukup aman
-     Tapi tambah breakpoint menengah untuk yakin:
-  ══════════════════════════════════════════ */
-      @media (min-width: 769px) and (max-width: 1100px) {
-        .hero-name {
-          font-size: clamp(2.2rem, 4.5vw, 3.2rem);
-        }
-      }
-      @media (min-width: 1101px) {
-        .hero-name {
-          font-size: clamp(2.8rem, 3.8vw, 4rem);
-        }
-      }
+  .tagline{
+    font-size:clamp(.88rem,1.2vw,1rem);color:var(--txm);
+    line-height:1.72;margin-bottom:24px;animation:fup .6s .28s ease both;
+  }
+  .hero-info{
+    display:flex;flex-wrap:wrap;gap:6px 14px;
+    margin-bottom:28px;animation:fup .6s .38s ease both;
+  }
+  .hii{display:flex;align-items:center;gap:6px;font-size:.85rem;color:var(--txm)}
+  .hii .ico{color:var(--ac);font-size:.9rem}
+  .hero-cta{display:flex;flex-wrap:wrap;gap:12px;animation:fup .6s .48s ease both}
 
-      /* ══════════════════════════════════════════
-     ABOUT
-  ══════════════════════════════════════════ */
-      #about {
-        border-top: 1px solid var(--bdr);
-        transition: border-color var(--tr);
-      }
-      .ag {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 60px;
-        align-items: start;
-      }
-      @media (max-width: 768px) {
-        .ag {
-          grid-template-columns: 1fr;
-          gap: 32px;
-        }
-      }
-      .abt p {
-        font-size: 1rem;
-        color: var(--txm);
-        line-height: 1.8;
-        margin-bottom: 14px;
-      }
-      .abt strong {
-        color: var(--tx);
-        font-weight: 600;
-      }
-      .icards {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 13px;
-      }
-      @media (max-width: 480px) {
-        .icards {
-          grid-template-columns: 1fr;
-        }
-      }
-      .icard {
-        background: var(--card);
-        border: 1px solid var(--bdr);
-        border-radius: 14px;
-        padding: 17px;
-        transition:
-          border-color 0.3s,
-          transform 0.3s,
-          background var(--tr);
-      }
-      .icard:hover {
-        border-color: var(--bdr2);
-        transform: translateY(-3px);
-      }
-      .icard-ico {
-        font-size: 1.45rem;
-        margin-bottom: 7px;
-      }
-      .icard-lbl {
-        font-size: 0.68rem;
-        font-weight: 700;
-        letter-spacing: 0.13em;
-        text-transform: uppercase;
-        color: var(--txd);
-        margin-bottom: 3px;
-      }
-      .icard-val {
-        font-family: "Syne", sans-serif;
-        font-size: 0.88rem;
-        font-weight: 700;
-        color: var(--tx);
-      }
+  /* Desktop breakpoints nama */
+  @media(min-width:769px) and (max-width:1100px){.hero-name{font-size:clamp(2.2rem,4.5vw,3.2rem)}}
+  @media(min-width:1101px){.hero-name{font-size:clamp(2.8rem,3.8vw,4rem)}}
 
-      /* ══════════════════════════════════════════
-     PROJECTS
-  ══════════════════════════════════════════ */
-      #projects {
-        border-top: 1px solid var(--bdr);
-        transition: border-color var(--tr);
-      }
-      .pg {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
-        gap: 22px;
-        margin-top: 44px;
-      }
-      @media (max-width: 480px) {
-        .pg {
-          grid-template-columns: 1fr;
-        }
-      }
-      .pcard {
-        background: var(--card);
-        border: 1px solid var(--bdr);
-        border-radius: 20px;
-        overflow: hidden;
-        transition: all 0.35s;
-        display: flex;
-        flex-direction: column;
-      }
-      .pcard:hover {
-        border-color: var(--bdr2);
-        transform: translateY(-6px);
-        box-shadow: var(--sh);
-      }
-      .pthumb {
-        width: 100%;
-        aspect-ratio: 16/9;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 2.8rem;
-        background: linear-gradient(135deg, var(--bg3) 0%, var(--bg2) 100%);
-        transition: transform 0.5s;
-      }
-      .pcard:hover .pthumb {
-        transform: scale(1.04);
-      }
-      .pbody {
-        padding: 20px;
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-      }
-      .ptags {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 5px;
-        margin-bottom: 10px;
-      }
-      .ptag {
-        font-size: 0.68rem;
-        font-weight: 700;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        color: var(--tagtx);
-        background: var(--tagbg);
-        padding: 3px 8px;
-        border-radius: 4px;
-      }
-      .ptitle {
-        font-family: "Syne", sans-serif;
-        font-size: 1.1rem;
-        font-weight: 800;
-        color: var(--tx);
-        margin-bottom: 7px;
-        letter-spacing: -0.01em;
-      }
-      .pdesc {
-        font-size: 0.875rem;
-        color: var(--txm);
-        line-height: 1.65;
-        flex: 1;
-        margin-bottom: 16px;
-      }
-      .plinks {
-        display: flex;
-        gap: 9px;
-        margin-top: auto;
-      }
-      .plink {
-        display: inline-flex;
-        align-items: center;
-        gap: 4px;
-        font-size: 0.76rem;
-        font-weight: 700;
-        color: var(--txm);
-        text-decoration: none;
-        border: 1px solid var(--bdr);
-        padding: 5px 11px;
-        border-radius: 6px;
-        transition: all 0.25s;
-      }
-      .plink:hover {
-        color: var(--ac);
-        border-color: var(--ac);
-        background: var(--tagbg);
-      }
+  /* Mobile hero */
+  @media(max-width:768px){
+    #hero{padding:32px clamp(16px,5vw,24px) 44px;align-items:flex-start;min-height:auto}
+    .hero-inner{flex-direction:column;gap:0;align-items:center;width:100%}
+    .photo-wrap{order:1;margin-bottom:20px}
+    .hero-txt{order:2;width:100%;flex:none;text-align:center}
+    .photo{width:110px;height:110px}
+    .photo-ring{inset:-8px}
+    .hero-name{font-size:clamp(1.9rem,8.5vw,2.6rem);letter-spacing:-.02em;margin-bottom:12px;text-align:center}
+    .badge{font-size:.63rem;letter-spacing:.07em;padding:5px 11px;margin-bottom:14px}
+    .tagline{font-size:.88rem;margin-bottom:18px;text-align:center}
+    .hero-info{justify-content:center;gap:5px 12px;margin-bottom:18px}
+    .hii{font-size:.77rem}
+    .hero-cta{justify-content:center}
+    .btn-p,.btn-o{flex:1;min-width:128px;justify-content:center;padding:12px;font-size:.8rem}
+  }
+  @media(max-width:380px){
+    .hero-name{font-size:clamp(1.7rem,8vw,1.9rem)}
+    .badge{font-size:.6rem;padding:4px 10px;white-space:normal;text-align:center}
+  }
 
-      /* ══════════════════════════════════════════
-     CONTACT
-  ══════════════════════════════════════════ */
-      #contact {
-        border-top: 1px solid var(--bdr);
-        transition: border-color var(--tr);
-      }
-      .cmethods {
-        display: flex;
-        flex-direction: column;
-        gap: 13px;
-        max-width: 540px;
-        margin: 0 auto;
-        align-items: center;
-      }
-      .citem {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        padding: 17px 18px;
-        background: var(--card);
-        border: 1px solid var(--bdr);
-        border-radius: 14px;
-        text-decoration: none;
-        transition: all 0.3s;
-        width: 100%;
-      }
-      .citem:hover {
-        border-color: var(--bdr2);
-        transform: translateX(6px);
-      }
-      .cico {
-        width: 40px;
-        height: 40px;
-        background: var(--tagbg);
-        border-radius: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.1rem;
-        flex-shrink: 0;
-      }
-      .clbl {
-        font-size: 0.7rem;
-        font-weight: 700;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
-        color: var(--txd);
-      }
-      .cval {
-        font-size: 0.875rem;
-        font-weight: 600;
-        color: var(--tx);
-        margin-top: 2px;
-      }
-      .wabtn {
-        display: inline-flex;
-        align-items: center;
-        gap: 11px;
-        padding: 17px 26px;
-        background: #25d366;
-        color: #fff;
-        font-family: "Syne", sans-serif;
-        font-size: 0.95rem;
-        font-weight: 700;
-        letter-spacing: 0.04em;
-        border-radius: 14px;
-        text-decoration: none;
-        transition: all 0.3s;
-        margin-top: 8px;
-        width: 100%;
-        justify-content: center;
-      }
-      .wabtn:hover {
-        background: #1ebe5a;
-        transform: translateY(-3px);
-        box-shadow: 0 8px 32px rgba(37, 211, 102, 0.3);
-      }
+  /* Buttons */
+  .btn-p{
+    display:inline-flex;align-items:center;gap:8px;padding:13px 26px;
+    background:var(--ac);color:var(--bg);
+    font-family:"Syne",sans-serif;font-size:.875rem;font-weight:700;
+    letter-spacing:.05em;border-radius:8px;text-decoration:none;
+    border:none;cursor:pointer;transition:all .3s;
+    position:relative;overflow:hidden;white-space:nowrap;
+  }
+  .btn-p::before{
+    content:"";position:absolute;inset:0;
+    background:rgba(255,255,255,.2);
+    transform:translateX(-100%);transition:transform .4s;
+  }
+  .btn-p:hover::before{transform:translateX(100%)}
+  .btn-p:hover{box-shadow:0 0 28px var(--glow),0 4px 16px rgba(0,0,0,.2);transform:translateY(-2px)}
+  .btn-o{
+    display:inline-flex;align-items:center;gap:8px;padding:12px 26px;
+    background:transparent;color:var(--tx);
+    font-family:"Syne",sans-serif;font-size:.875rem;font-weight:600;
+    letter-spacing:.05em;border-radius:8px;text-decoration:none;
+    border:1.5px solid var(--bdr);cursor:pointer;transition:all .3s;white-space:nowrap;
+  }
+  .btn-o:hover{border-color:var(--ac);color:var(--ac);transform:translateY(-2px)}
 
-      /* ══════════════════════════════════════════
-     FOOTER
-  ══════════════════════════════════════════ */
-      footer {
-        border-top: 1px solid var(--bdr);
-        padding: 26px clamp(16px, 5vw, 5%);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 10px;
-        max-width: 1180px;
-        margin: 0 auto;
-        width: 100%;
-      }
-      .fl {
-        font-family: "Syne", sans-serif;
-        font-weight: 700;
-        font-size: 0.875rem;
-        color: var(--txm);
-      }
-      .fl span {
-        color: var(--ac);
-      }
-      .fr {
-        font-size: 0.78rem;
-        color: var(--txd);
-      }
+  /* ABOUT */
+  #about{border-top:1px solid var(--bdr);transition:border-color var(--tr)}
+  .ag{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start}
+  @media(max-width:768px){.ag{grid-template-columns:1fr;gap:32px}}
+  .abt p{font-size:1rem;color:var(--txm);line-height:1.8;margin-bottom:14px}
+  .abt strong{color:var(--tx);font-weight:600}
+  .icards{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+  @media(max-width:480px){.icards{grid-template-columns:1fr}}
+  .icard{
+    background:var(--card);border:1px solid var(--bdr);border-radius:14px;padding:17px;
+    transition:border-color .3s,transform .3s,background var(--tr);
+  }
+  .icard:hover{border-color:var(--bdr2);transform:translateY(-3px)}
+  .icard-ico{font-size:1.45rem;margin-bottom:7px}
+  .icard-lbl{font-size:.68rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--txd);margin-bottom:3px}
+  .icard-val{font-family:"Syne",sans-serif;font-size:.88rem;font-weight:700;color:var(--tx)}
 
-      /* ══════════════════════════════════════════
-     SCROLL REVEAL
-  ══════════════════════════════════════════ */
-      .rv {
-        opacity: 0;
-        transform: translateY(28px);
-        transition:
-          opacity 0.7s,
-          transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-      }
-      .rv.vi {
-        opacity: 1;
-        transform: translateY(0);
-      }
-      .d1 {
-        transition-delay: 0.1s;
-      }
-      .d2 {
-        transition-delay: 0.2s;
-      }
-      .d3 {
-        transition-delay: 0.3s;
-      }
+  /* PROJECTS */
+  #projects{border-top:1px solid var(--bdr);transition:border-color var(--tr)}
+  .pg{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:22px;margin-top:44px}
+  @media(max-width:480px){.pg{grid-template-columns:1fr}}
+  .pcard{
+    background:var(--card);border:1px solid var(--bdr);border-radius:20px;
+    overflow:hidden;transition:all .35s;display:flex;flex-direction:column;
+  }
+  .pcard:hover{border-color:var(--bdr2);transform:translateY(-6px);box-shadow:var(--sh)}
+  .pthumb{
+    width:100%;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;
+    font-size:2.8rem;background:linear-gradient(135deg,var(--bg3) 0%,var(--bg2) 100%);
+    transition:transform .5s;
+  }
+  .pcard:hover .pthumb{transform:scale(1.04)}
+  .pbody{padding:20px;flex:1;display:flex;flex-direction:column}
+  .ptags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}
+  .ptag{
+    font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--tagtx);background:var(--tagbg);padding:3px 8px;border-radius:4px;
+  }
+  .ptitle{font-family:"Syne",sans-serif;font-size:1.1rem;font-weight:800;color:var(--tx);margin-bottom:7px;letter-spacing:-.01em}
+  .pdesc{font-size:.875rem;color:var(--txm);line-height:1.65;flex:1;margin-bottom:16px}
+  .plinks{display:flex;gap:9px;margin-top:auto}
+  .plink{
+    display:inline-flex;align-items:center;gap:4px;font-size:.76rem;font-weight:700;
+    color:var(--txm);text-decoration:none;border:1px solid var(--bdr);
+    padding:5px 11px;border-radius:6px;transition:all .25s;
+  }
+  .plink:hover{color:var(--ac);border-color:var(--ac);background:var(--tagbg)}
 
-      /* Scrollbar */
-      ::-webkit-scrollbar {
-        width: 5px;
-      }
-      ::-webkit-scrollbar-track {
-        background: var(--bg);
-      }
-      ::-webkit-scrollbar-thumb {
-        background: var(--bdr);
-        border-radius: 3px;
-      }
-      ::-webkit-scrollbar-thumb:hover {
-        background: var(--ac);
-      }
+  /* CONTACT */
+  #contact{border-top:1px solid var(--bdr);transition:border-color var(--tr)}
+  .cmethods{display:flex;flex-direction:column;gap:13px;max-width:540px}
+  .citem{
+    display:flex;align-items:center;gap:15px;padding:17px 18px;
+    background:var(--card);border:1px solid var(--bdr);border-radius:14px;
+    text-decoration:none;transition:all .3s;width:100%;
+  }
+  .citem:hover{border-color:var(--bdr2);transform:translateX(6px)}
+  .cico{
+    width:40px;height:40px;background:var(--tagbg);border-radius:10px;
+    display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;
+  }
+  .clbl{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--txd)}
+  .cval{font-size:.875rem;font-weight:600;color:var(--tx);margin-top:2px}
+  .wabtn{
+    display:inline-flex;align-items:center;gap:11px;padding:17px 26px;
+    background:#25d366;color:#fff;font-family:"Syne",sans-serif;font-size:.95rem;
+    font-weight:700;letter-spacing:.04em;border-radius:14px;text-decoration:none;
+    transition:all .3s;margin-top:8px;width:100%;justify-content:center;
+  }
+  .wabtn:hover{background:#1ebe5a;transform:translateY(-3px);box-shadow:0 8px 32px rgba(37,211,102,.3)}
 
-      /* ══════════════════════════════════════════
-     PAGE LOADER
-  ══════════════════════════════════════════ */
-      .loader {
-        position: fixed;
-        inset: 0;
-        background: var(--bg);
-        z-index: 9999;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column;
-        gap: 18px;
-        transition: opacity 0.6s;
-      }
-      .loader.done {
-        opacity: 0;
-        pointer-events: none;
-      }
-      .lname {
-        font-family: "Syne", sans-serif;
-        font-size: 1.35rem;
-        font-weight: 800;
-        color: var(--ac);
-        letter-spacing: 0.05em;
-      }
-      .lbar-w {
-        width: 180px;
-        height: 3px;
-        background: var(--bdr);
-        border-radius: 2px;
-        overflow: hidden;
-      }
-      .lbar {
-        height: 100%;
-        background: var(--ac);
-        border-radius: 2px;
-        width: 0;
-        animation: lb 1.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-      }
-      @keyframes lb {
-        to {
-          width: 100%;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <!-- Loader -->
-    <div class="loader" id="loader">
-      <div class="lname">MA</div>
-      <div class="lbar-w"><div class="lbar"></div></div>
-    </div>
+  /* FOOTER */
+  footer{
+    border-top:1px solid var(--bdr);padding:26px clamp(16px,5vw,5%);
+    display:flex;justify-content:space-between;align-items:center;
+    flex-wrap:wrap;gap:10px;max-width:1180px;margin:0 auto;width:100%;
+  }
+  .fl{font-family:"Syne",sans-serif;font-weight:700;font-size:.875rem;color:var(--txm)}
+  .fl span{color:var(--ac)}
+  .fr{font-size:.78rem;color:var(--txd)}
 
-    <!-- Cursor -->
-    <div class="cur" id="cur"></div>
-    <div class="cur-ring" id="curRing"></div>
-    <div class="bg-mesh"></div>
+  /* SCROLL REVEAL */
+  .rv{opacity:0;transform:translateY(28px);transition:opacity .7s,transform .7s cubic-bezier(.16,1,.3,1)}
+  .rv.vi{opacity:1;transform:translateY(0)}
+  .d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}
 
-    <!-- ══════════════════════════════════════════
-     NAVBAR
-══════════════════════════════════════════ -->
-    <nav id="navbar">
-      <a href="#hero" class="nav-logo">MA</a>
+  /* SCROLLBAR */
+  ::-webkit-scrollbar{width:5px}
+  ::-webkit-scrollbar-track{background:var(--bg)}
+  ::-webkit-scrollbar-thumb{background:var(--bdr);border-radius:3px}
+  ::-webkit-scrollbar-thumb:hover{background:var(--ac)}
 
-      <ul class="nav-links" id="navLinks">
-        <li><a href="#about">About</a></li>
-        <li><a href="#projects">Projects</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
+  /* LOADER */
+  .loader{
+    position:fixed;inset:0;background:var(--bg);z-index:9999;
+    display:flex;align-items:center;justify-content:center;
+    flex-direction:column;gap:18px;transition:opacity .6s;
+  }
+  .loader.done{opacity:0;pointer-events:none}
+  .lname{font-family:"Syne",sans-serif;font-size:1.35rem;font-weight:800;color:var(--ac);letter-spacing:.05em}
+  .lbar-w{width:180px;height:3px;background:var(--bdr);border-radius:2px;overflow:hidden}
+  .lbar{height:100%;background:var(--ac);border-radius:2px;width:0;animation:lb 1.3s cubic-bezier(.4,0,.2,1) forwards}
+  @keyframes lb{to{width:100%}}
+  </style>
+</head>
+<body>
 
-      <div class="nav-right">
-        <button class="tt" id="tt" aria-label="Toggle theme">
-          <span class="ti sun">☀️</span>
-          <span class="ti moon">🌙</span>
-        </button>
-        <button class="hb" id="hb" aria-label="Buka menu" aria-expanded="false">
-          <span></span><span></span><span></span>
-        </button>
+<div class="loader" id="loader">
+  <div class="lname">MA</div>
+  <div class="lbar-w"><div class="lbar"></div></div>
+</div>
+
+<div class="cur" id="cur"></div>
+<div class="cur-ring" id="curRing"></div>
+<div class="bg-mesh"></div>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">MA</a>
+
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#about">About</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+
+  <div class="nav-right">
+    <button class="tt" id="tt" aria-label="Toggle theme">
+      <span class="ti sun">☀️</span>
+      <span class="ti moon">🌙</span>
+    </button>
+    <button class="hb" id="hb" aria-label="Buka menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<main>
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-inner">
+      <div class="photo-wrap">
+        <div class="photo-ring"></div>
+        <img class="photo" src="saya.jfif" alt="Foto Muksalmina Adami"/>
       </div>
-    </nav>
-
-    <main>
-      <!-- ══════════════════════════════════════════
-       HERO
-  ══════════════════════════════════════════ -->
-      <section id="hero">
-        <div class="hero-inner">
-          <!-- Foto -->
-          <div class="photo-wrap">
-            <div class="photo-ring"></div>
-            <!--
-          ✏️ GANTI src="saya.jfif" dengan nama file foto kamu
-          Letakkan file foto di folder yang sama dengan HTML ini
-        -->
-            <img class="photo" src="saya.jfif" alt="Foto Muksalmina Adami" />
-          </div>
-
-          <!-- Teks hero -->
-          <div class="hero-txt">
-            <div class="badge">
-              <span class="dot"></span> Available for opportunities
-            </div>
-
-            <!--
-          FIX NAMA:
-          Dua baris terpisah secara eksplisit.
-          .n1 = "Muksalmina" (putih/default)
-          .n2 = "Adami"      (warna accent, baris bawah)
-          Font size dikontrol per breakpoint di CSS,
-          sehingga tidak pernah terpotong di tengah kata.
-        -->
-            <h1 class="hero-name">
-              <span class="n1">Muksalmina</span>
-              <span class="n2">Adami</span>
-            </h1>
-
-            <p class="tagline">
-              Mahasiswa aktif di Universitas Jabal Ghafur, passionate di bidang
-              teknologi &amp; pengembangan digital. Siap membangun solusi yang
-              bermakna.
-            </p>
-            <div class="hero-info">
-              <div class="hii"><span class="ico">📍</span> Lahir di Batam</div>
-              <div class="hii"><span class="ico">🎓</span> SMKN 2 Sigli</div>
-              <div class="hii">
-                <span class="ico">🏛️</span> Univ. Jabal Ghafur
-              </div>
-            </div>
-            <div class="hero-cta">
-              <a href="#projects" class="btn-p">Lihat Projects →</a>
-              <a href="#contact" class="btn-o">Hubungi Saya</a>
-            </div>
-          </div>
+      <div class="hero-txt">
+        <div class="badge"><span class="dot"></span> Available for opportunities</div>
+        <h1 class="hero-name">
+          <span class="n1">Muksalmina</span>
+          <span class="n2">Adami</span>
+        </h1>
+        <p class="tagline">
+          Mahasiswa aktif di Universitas Jabal Ghafur, passionate di bidang
+          teknologi &amp; pengembangan digital. Siap membangun solusi yang bermakna.
+        </p>
+        <div class="hero-info">
+          <div class="hii"><span class="ico">📍</span> Lahir di Batam</div>
+          <div class="hii"><span class="ico">🎓</span> SMKN 2 Sigli</div>
+          <div class="hii"><span class="ico">🏛️</span> Univ. Jabal Ghafur</div>
         </div>
-      </section>
-
-      <!-- ══════════════════════════════════════════
-       ABOUT
-  ══════════════════════════════════════════ -->
-      <section id="about">
-        <div class="rv">
-          <div class="slabel">Tentang Saya</div>
-          <h2 class="stitle">Kenali Lebih Dekat</h2>
+        <div class="hero-cta">
+          <a href="#projects" class="btn-p">Lihat Projects →</a>
+          <a href="#contact" class="btn-o">Hubungi Saya</a>
         </div>
-        <div class="ag">
-          <div class="abt rv d1">
-            <p>
-              Halo! Saya <strong>Muksalmina Adami</strong>, seorang pemuda yang
-              lahir di kota Batam dan kini sedang menempuh pendidikan di
-              <strong>Universitas Jabal Ghafur</strong>.
-            </p>
-            <p>
-              Sebelumnya, saya menyelesaikan pendidikan menengah di
-              <strong>SMKN 2 Sigli</strong>, di mana saya mulai tertarik dengan
-              dunia teknologi dan komputer.
-            </p>
-            <p>
-              Saya bersemangat membangun solusi digital yang bermanfaat, terus
-              belajar hal-hal baru, dan berkolaborasi menciptakan sesuatu yang
-              bermakna.
-            </p>
-          </div>
-          <div class="icards rv d2">
-            <div class="icard">
-              <div class="icard-ico">🌊</div>
-              <div class="icard-lbl">Kota Kelahiran</div>
-              <div class="icard-val">Batam</div>
-            </div>
-            <div class="icard">
-              <div class="icard-ico">🏫</div>
-              <div class="icard-lbl">Sekolah</div>
-              <div class="icard-val">SMKN 2 Sigli</div>
-            </div>
-            <div class="icard">
-              <div class="icard-ico">🏛️</div>
-              <div class="icard-lbl">Universitas</div>
-              <div class="icard-val">Jabal Ghafur</div>
-            </div>
-            <div class="icard">
-              <div class="icard-ico">📚</div>
-              <div class="icard-lbl">Status</div>
-              <div class="icard-val">Mahasiswa Aktif</div>
-            </div>
-          </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="rv">
+      <div class="slabel">Tentang Saya</div>
+      <h2 class="stitle">Kenali Lebih Dekat</h2>
+    </div>
+    <div class="ag">
+      <div class="abt rv d1">
+        <p>Halo! Saya <strong>Muksalmina Adami</strong>, seorang pemuda yang lahir di kota Batam dan kini sedang menempuh pendidikan di <strong>Universitas Jabal Ghafur</strong>.</p>
+        <p>Sebelumnya, saya menyelesaikan pendidikan menengah di <strong>SMKN 2 Sigli</strong>, di mana saya mulai tertarik dengan dunia teknologi dan komputer.</p>
+        <p>Saya bersemangat membangun solusi digital yang bermanfaat, terus belajar hal-hal baru, dan berkolaborasi menciptakan sesuatu yang bermakna.</p>
+      </div>
+      <div class="icards rv d2">
+        <div class="icard"><div class="icard-ico">🌊</div><div class="icard-lbl">Kota Kelahiran</div><div class="icard-val">Batam</div></div>
+        <div class="icard"><div class="icard-ico">🏫</div><div class="icard-lbl">Sekolah</div><div class="icard-val">SMKN 2 Sigli</div></div>
+        <div class="icard"><div class="icard-ico">🏛️</div><div class="icard-lbl">Universitas</div><div class="icard-val">Jabal Ghafur</div></div>
+        <div class="icard"><div class="icard-ico">📚</div><div class="icard-lbl">Status</div><div class="icard-val">Mahasiswa Aktif</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="rv">
+      <div class="slabel">Portfolio</div>
+      <h2 class="stitle">Project Saya</h2>
+      <p class="ssub">Kumpulan project yang pernah saya kerjakan.</p>
+    </div>
+    <div class="pg">
+
+      <!-- PROJECT 1 -->
+      <div class="pcard rv d1">
+        <div class="pthumb">☕</div>
+        <div class="pbody">
+          <div class="ptags"><span class="ptag">HTML</span><span class="ptag">CSS</span><span class="ptag">JS</span></div>
+          <div class="ptitle">Web Kopi Online Sederhana</div>
+          <div class="pdesc">Web kopi online yang memudahkan pengguna saat memesan kopi.</div>
+          <div class="plinks"><a href="kopi.html" class="plink">🌐 Preview</a></div>
         </div>
-      </section>
+      </div>
 
-      <section id="projects">
-        <div class="rv">
-          <div class="slabel">Portfolio</div>
-          <h2 class="stitle">Project Saya</h2>
-          <p class="ssub">Kumpulan project yang sedang saya kerjakan</p>
+      <!-- PROJECT 2 -->
+      <div class="pcard rv d2">
+        <div class="pthumb">🔥</div>
+        <div class="pbody">
+          <div class="ptags"><span class="ptag">HTML</span><span class="ptag">CSS</span><span class="ptag">JS</span></div>
+          <div class="ptitle">Web Gas Online</div>
+          <div class="pdesc">Web gas online untuk desa di tempat lingkungan saya.</div>
+          <div class="plinks"><a href="gass.html" class="plink">🌐 Preview</a></div>
         </div>
-        <div class="pg">
-          <!-- PROJECT 1 — ✏️ ganti sesuai projectmu -->
-          <div class="pcard rv d1">
-            <div class="pthumb">💻</div>
-            <div class="pbody">
-              <div class="ptags">
-                <span class="ptag">HTML</span><span class="ptag">CSS</span
-                ><span class="ptag">JS</span>
-              </div>
-              <div class="ptitle">Web Kopi Online Sederhana</div>
-              <div class="pdesc">
-                Web kopi online yang memudahkan pengguna saat memesan kopi
-              </div>
-              <div class="plinks">
-                <a href="kopi.html" class="plink">🐙 Preview</a>
-              </div>
-            </div>
-          </div>
+      </div>
+    </div>
+  </section>
 
-          <!-- PROJECT 2 -->
-          <div class="pcard rv d1">
-            <div class="pthumb">💻</div>
-            <div class="pbody">
-              <div class="ptags">
-                <span class="ptag">HTML</span><span class="ptag">CSS</span
-                ><span class="ptag">JS</span>
-              </div>
-              <div class="ptitle">Web Kopi Online Sederhana</div>
-              <div class="pdesc">
-                Web gas online untuk desa di tempat lingkungan saya
-              </div>
-              <div class="plinks">
-                <a href="gass.html" class="plink">🐙 Preview</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="rv">
+      <div class="slabel">Kontak</div>
+      <h2 class="stitle">Mari Terhubung</h2>
+    </div>
+    <div class="cmethods rv d1">
+      <a href="mailto:muksalminaadami01@gmail.com" class="citem">
+        <div class="cico">📧</div>
+        <div><div class="clbl">Email</div><div class="cval">muksalminaadami01@gmail.com</div></div>
+      </a>
+      <a href="https://github.com/Muksalminaadami" target="_blank" class="citem">
+        <div class="cico">🐙</div>
+        <div><div class="clbl">GitHub</div><div class="cval">@Muksalminaadami</div></div>
+      </a>
+      <a href="https://www.instagram.com/muksalminaadamii._/" target="_blank" class="citem">
+        <div class="cico">📱</div>
+        <div><div class="clbl">Instagram</div><div class="cval">@muksalminaadamii._</div></div>
+      </a>
+      <a href="https://wa.me/6283872035848" target="_blank" class="wabtn">
+        <span style="font-size:1.3rem">💬</span> Chat via WhatsApp
+      </a>
+    </div>
+  </section>
+</main>
 
-      <section id="contact">
-        <div class="rv">
-          <div class="slabel">Kontak</div>
-          <h2 class="stitle">Mari Terhubung</h2>
-        </div>
-        <div class="cmethods rv d1">
-          <a href="mailto:muksalminaadami01@gmail.com" class="citem">
-            <div class="cico">📧</div>
-            <div>
-              <div class="clbl">Email</div>
-              <div class="cval">muksalminaadami01@gmail.com</div>
-            </div>
-          </a>
-          <a
-            href="https://github.com/Muksalminaadami"
-            target="_blank"
-            class="citem"
-          >
-            <div class="cico">🐙</div>
-            <div>
-              <div class="clbl">GitHub</div>
-              <div class="cval">@muksalmina</div>
-            </div>
-          </a>
-          <a
-            href="https://www.instagram.com/muksalminaadamii._/"
-            target="_blank"
-            class="citem"
-          >
-            <div class="cico">📱</div>
-            <div>
-              <div class="clbl">Instagram</div>
-              <div class="cval">@muksalminaadamii._</div>
-            </div>
-          </a>
-          <a href="https://wa.me/6283872035848" target="_blank" class="wabtn">
-            <span style="font-size: 1.3rem">💬</span> Chat via WhatsApp
-          </a>
-        </div>
-      </section>
-    </main>
+<footer>
+  <div class="fl">Muksalmina <span>Adami</span> — Portfolio</div>
+  <div class="fr">2026</div>
+</footer>
 
-    <footer>
-      <div class="fl">Muksalmina <span>Adami</span> — Portfolio</div>
-      <div class="fr">2026</div>
-    </footer>
+<script>
+/* ── LOADER ── */
+window.addEventListener("load",()=>{
+  setTimeout(()=>{
+    const l=document.getElementById("loader");
+    l.classList.add("done");
+    setTimeout(()=>l.remove(),700);
+  },1400);
+});
 
-    <script>
-      /* ── LOADER ── */
-      window.addEventListener("load", () => {
-        setTimeout(() => {
-          const l = document.getElementById("loader");
-          l.classList.add("done");
-          setTimeout(() => l.remove(), 700);
-        }, 1400);
-      });
+/* ── CURSOR ── */
+const cur=document.getElementById("cur");
+const ring=document.getElementById("curRing");
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener("mousemove",e=>{mx=e.clientX;my=e.clientY});
+(function anim(){
+  cur.style.left=mx+"px";cur.style.top=my+"px";
+  rx+=(mx-rx)*.1;ry+=(my-ry)*.1;
+  ring.style.left=rx+"px";ring.style.top=ry+"px";
+  requestAnimationFrame(anim);
+})();
+document.querySelectorAll("a,button,.icard,.pcard,.citem").forEach(el=>{
+  el.addEventListener("mouseenter",()=>{cur.classList.add("hov");ring.classList.add("hov")});
+  el.addEventListener("mouseleave",()=>{cur.classList.remove("hov");ring.classList.remove("hov")});
+});
 
-      /* ── CURSOR ── */
-      const cur = document.getElementById("cur");
-      const ring = document.getElementById("curRing");
-      let mx = 0,
-        my = 0,
-        rx = 0,
-        ry = 0;
-      document.addEventListener("mousemove", (e) => {
-        mx = e.clientX;
-        my = e.clientY;
-      });
-      (function anim() {
-        cur.style.left = mx + "px";
-        cur.style.top = my + "px";
-        rx += (mx - rx) * 0.1;
-        ry += (my - ry) * 0.1;
-        ring.style.left = rx + "px";
-        ring.style.top = ry + "px";
-        requestAnimationFrame(anim);
-      })();
-      document
-        .querySelectorAll("a,button,.icard,.pcard,.citem")
-        .forEach((el) => {
-          el.addEventListener("mouseenter", () => {
-            cur.classList.add("hov");
-            ring.classList.add("hov");
-          });
-          el.addEventListener("mouseleave", () => {
-            cur.classList.remove("hov");
-            ring.classList.remove("hov");
-          });
-        });
+/* ── THEME ── */
+document.getElementById("tt").addEventListener("click",()=>{
+  const h=document.documentElement;
+  h.setAttribute("data-theme",h.getAttribute("data-theme")==="dark"?"light":"dark");
+});
 
-      /* ── THEME ── */
-      document.getElementById("tt").addEventListener("click", () => {
-        const h = document.documentElement;
-        h.setAttribute(
-          "data-theme",
-          h.getAttribute("data-theme") === "dark" ? "light" : "dark",
-        );
-      });
+/* ══════════════════════════════════════════
+   HAMBURGER — fixed & bulletproof
+   Cara kerja:
+   1. Klik hb → toggle class "open" di hb dan navLinks
+   2. stopPropagation agar klik tidak langsung ditutup
+      oleh listener "klik di luar"
+   3. Klik di luar area nav → tutup menu
+   4. Klik link di dalam menu → tutup menu
+   5. Tekan Escape → tutup menu
+══════════════════════════════════════════ */
+const hb = document.getElementById("hb");
+const nl = document.getElementById("navLinks");
 
-      /* ── HAMBURGER ── */
-      const hb = document.getElementById("hb");
-      const nl = document.getElementById("navLinks");
+function openMenu(){
+  hb.classList.add("open");
+  nl.classList.add("open");
+  hb.setAttribute("aria-expanded","true");
+  hb.setAttribute("aria-label","Tutup menu");
+}
+function closeMenu(){
+  hb.classList.remove("open");
+  nl.classList.remove("open");
+  hb.setAttribute("aria-expanded","false");
+  hb.setAttribute("aria-label","Buka menu");
+}
 
-      function closeMenu() {
-        hb.classList.remove("open");
-        nl.classList.remove("open");
-        hb.setAttribute("aria-expanded", "false");
-        hb.setAttribute("aria-label", "Buka menu");
-      }
+hb.addEventListener("click",e=>{
+  e.stopPropagation();
+  nl.classList.contains("open") ? closeMenu() : openMenu();
+});
 
-      hb.addEventListener("click", (e) => {
-        e.stopPropagation();
-        const opening = !nl.classList.contains("open");
-        if (opening) {
-          hb.classList.add("open");
-          nl.classList.add("open");
-          hb.setAttribute("aria-expanded", "true");
-          hb.setAttribute("aria-label", "Tutup menu");
-        } else {
-          closeMenu();
-        }
-      });
+/* Tutup saat link diklik */
+nl.querySelectorAll("a").forEach(a=>a.addEventListener("click",()=>{
+  closeMenu();
+}));
 
-      /* Tutup saat link diklik */
-      nl.querySelectorAll("a").forEach((a) =>
-        a.addEventListener("click", closeMenu),
-      );
+/* Tutup saat klik di luar */
+document.addEventListener("click",e=>{
+  if(!navbar.contains(e.target)) closeMenu();
+});
 
-      /* Tutup saat klik di luar */
-      document.addEventListener("click", (e) => {
-        if (!hb.contains(e.target) && !nl.contains(e.target)) closeMenu();
-      });
+/* Tutup saat Escape */
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape") closeMenu();
+});
 
-      /* Tutup saat Escape */
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") closeMenu();
-      });
-
-      /* ── SCROLL REVEAL ── */
-      const obs = new IntersectionObserver(
-        (entries) =>
-          entries.forEach((e) => {
-            if (e.isIntersecting) e.target.classList.add("vi");
-          }),
-        { threshold: 0.1 },
-      );
-      document.querySelectorAll(".rv").forEach((el) => obs.observe(el));
-    </script>
-  </body>
+/* ── SCROLL REVEAL ── */
+const obs=new IntersectionObserver(
+  entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add("vi")}),
+  {threshold:.1}
+);
+document.querySelectorAll(".rv").forEach(el=>obs.observe(el));
+</script>
+</body>
 </html>
