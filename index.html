@@ -2,7 +2,10 @@
 <html lang="id" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+    />
     <title>Muksalmina Adami — Portfolio</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
@@ -26,7 +29,7 @@
         --accent: #4fc3f7;
         --glow: rgba(79, 195, 247, 0.15);
         --glow2: rgba(79, 195, 247, 0.08);
-        --nav-bg: rgba(8, 12, 20, 0.85);
+        --nav-bg: rgba(8, 12, 20, 0.94);
         --tag-bg: rgba(79, 195, 247, 0.12);
         --tag-text: #7dd3fc;
         --shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
@@ -35,7 +38,7 @@
         --bg: #f0f4fc;
         --bg2: #e4ecf9;
         --bg3: #dce6f7;
-        --card: #ffffff;
+        --card: #fff;
         --border: rgba(37, 99, 180, 0.12);
         --border-hover: rgba(37, 99, 180, 0.35);
         --text: #0f1c30;
@@ -44,12 +47,13 @@
         --accent: #0369a1;
         --glow: rgba(3, 105, 161, 0.1);
         --glow2: rgba(3, 105, 161, 0.05);
-        --nav-bg: rgba(240, 244, 252, 0.85);
+        --nav-bg: rgba(240, 244, 252, 0.94);
         --tag-bg: rgba(3, 105, 161, 0.1);
         --tag-text: #0369a1;
         --shadow: 0 8px 40px rgba(0, 0, 0, 0.1);
       }
 
+      /* ── RESET ── */
       *,
       *::before,
       *::after {
@@ -59,19 +63,23 @@
       }
       html {
         scroll-behavior: smooth;
+        overflow-x: hidden; /* FIX: No horizontal scroll */
+        width: 100%;
       }
       body {
         font-family: "DM Sans", sans-serif;
         background: var(--bg);
         color: var(--text);
         min-height: 100vh;
-        overflow-x: hidden;
+        overflow-x: hidden; /* FIX */
+        width: 100%;
         transition:
           background var(--transition),
           color var(--transition);
         cursor: none;
       }
 
+      /* ── CURSOR ── */
       .cursor {
         position: fixed;
         width: 12px;
@@ -120,6 +128,7 @@
         }
       }
 
+      /* ── BG MESH ── */
       .bg-mesh {
         position: fixed;
         inset: 0;
@@ -159,14 +168,19 @@
         }
       }
 
+      /* ══════════════════════════════════════
+         NAVBAR — BUG FIX
+      ══════════════════════════════════════ */
       nav {
         position: fixed;
         top: 0;
         left: 0;
         right: 0;
-        z-index: 100;
-        padding: 0 5%;
-        height: 68px;
+        z-index: 200;
+        /* FIX: Gunakan padding inline yang tidak menyebabkan overflow */
+        padding: 0 20px;
+        height: 64px;
+        width: 100%; /* FIX: Lebar penuh */
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -178,6 +192,12 @@
           background var(--transition),
           border-color var(--transition);
       }
+      @media (min-width: 769px) {
+        nav {
+          padding: 0 5%;
+        }
+      }
+
       .nav-logo {
         font-family: "Syne", sans-serif;
         font-weight: 800;
@@ -185,10 +205,20 @@
         color: var(--accent);
         text-decoration: none;
         letter-spacing: -0.02em;
+        flex-shrink: 0; /* FIX: Jangan menyusut */
       }
       .nav-logo span {
         color: var(--text);
       }
+
+      .nav-right {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-shrink: 0; /* FIX: Jangan menyusut */
+      }
+
+      /* Desktop nav links */
       .nav-links {
         display: flex;
         align-items: center;
@@ -220,55 +250,52 @@
       .nav-links a:hover::after {
         width: 100%;
       }
-      .nav-right {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-      }
+
+      /* Theme toggle */
       .theme-toggle {
-        width: 48px;
-        height: 26px;
+        width: 44px;
+        height: 24px;
         background: var(--bg3);
         border: 1px solid var(--border);
         border-radius: 50px;
         cursor: pointer;
         position: relative;
+        flex-shrink: 0;
         transition:
           background var(--transition),
           border-color var(--transition);
-        flex-shrink: 0;
       }
       .theme-toggle::before {
         content: "";
         position: absolute;
         top: 3px;
         left: 3px;
-        width: 18px;
-        height: 18px;
+        width: 16px;
+        height: 16px;
         background: var(--accent);
         border-radius: 50%;
         transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         box-shadow: 0 0 8px var(--glow);
       }
       [data-theme="light"] .theme-toggle::before {
-        transform: translateX(22px);
+        transform: translateX(20px);
       }
       .theme-toggle:hover {
         border-color: var(--accent);
       }
       .theme-icon {
-        font-size: 0.75rem;
+        font-size: 0.65rem;
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
         transition: opacity 0.3s;
       }
       .theme-icon.sun {
-        right: 5px;
+        right: 4px;
         opacity: 0;
       }
       .theme-icon.moon {
-        left: 5px;
+        left: 4px;
         opacity: 1;
       }
       [data-theme="light"] .theme-icon.sun {
@@ -277,73 +304,120 @@
       [data-theme="light"] .theme-icon.moon {
         opacity: 0;
       }
+
+      /* ── Hamburger ── */
       .hamburger {
         display: none;
         flex-direction: column;
+        justify-content: center;
         gap: 5px;
         cursor: pointer;
-        padding: 4px;
+        /* FIX: Ukuran fix, tidak geser layout */
+        width: 36px;
+        height: 36px;
+        padding: 6px;
         background: none;
         border: none;
+        flex-shrink: 0;
       }
       .hamburger span {
         display: block;
-        width: 24px;
+        width: 22px;
         height: 2px;
         background: var(--text);
         border-radius: 2px;
-        transition: all 0.3s;
+        transition: all 0.3s ease;
       }
+      /* Animasi X saat terbuka */
       .hamburger.open span:nth-child(1) {
-        transform: rotate(45deg) translate(5px, 5px);
+        transform: translateY(7px) rotate(45deg);
       }
       .hamburger.open span:nth-child(2) {
         opacity: 0;
+        transform: scaleX(0);
       }
       .hamburger.open span:nth-child(3) {
-        transform: rotate(-45deg) translate(5px, -5px);
+        transform: translateY(-7px) rotate(-45deg);
       }
+
+      /* ══════════════════════════════════════
+         MOBILE NAV DROPDOWN — BUG FIX
+      ══════════════════════════════════════ */
       @media (max-width: 768px) {
         .hamburger {
           display: flex;
         }
+
         .nav-links {
+          /* FIX: Posisi dan ukuran fixed penuh */
           position: fixed;
-          top: 68px;
+          top: 64px;
           left: 0;
           right: 0;
+          width: 100%; /* FIX: Full width */
           background: var(--nav-bg);
-          backdrop-filter: blur(20px);
+          backdrop-filter: blur(24px);
+          -webkit-backdrop-filter: blur(24px);
           border-bottom: 1px solid var(--border);
           flex-direction: column;
-          padding: 24px;
-          gap: 20px;
-          transform: translateY(-110%);
+          align-items: flex-start;
+          padding: 20px 24px 28px;
+          gap: 0;
+          /* FIX: Sembunyikan dengan benar — translateY + visibility */
+          transform: translateY(-10px);
           opacity: 0;
+          visibility: hidden;
+          pointer-events: none;
           transition:
-            transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-            opacity 0.3s;
+            transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+            opacity 0.3s,
+            visibility 0.3s;
+          z-index: 199;
         }
+
+        /* FIX: Saat .open ditambahkan JS → tampilkan */
         .nav-links.open {
           transform: translateY(0);
           opacity: 1;
+          visibility: visible;
+          pointer-events: auto;
+        }
+
+        .nav-links li {
+          width: 100%;
         }
         .nav-links a {
+          display: block;
           font-size: 1rem;
+          font-weight: 600;
+          padding: 14px 0;
+          border-bottom: 1px solid var(--border);
+          color: var(--text-muted);
+        }
+        .nav-links a:hover {
+          color: var(--accent);
+        }
+        .nav-links li:last-child a {
+          border-bottom: none;
         }
       }
 
+      /* ── MAIN / SECTION ── */
       main {
         position: relative;
         z-index: 1;
-        padding-top: 68px;
+        padding-top: 64px;
+        width: 100%;
+        overflow-x: hidden;
       }
       section {
-        padding: clamp(60px, 10vw, 120px) 5%;
+        padding: clamp(56px, 10vw, 120px) 5%;
         max-width: 1200px;
         margin: 0 auto;
+        width: 100%;
       }
 
+      /* ── SECTION LABEL ── */
       .section-label {
         font-family: "Syne", sans-serif;
         font-size: 0.72rem;
@@ -362,41 +436,46 @@
         width: 28px;
         height: 1.5px;
         background: var(--accent);
+        flex-shrink: 0;
       }
       .section-title {
         font-family: "Syne", sans-serif;
-        font-size: clamp(2rem, 4vw, 3rem);
+        font-size: clamp(1.8rem, 4vw, 3rem);
         font-weight: 800;
         line-height: 1.1;
         letter-spacing: -0.03em;
         margin-bottom: 16px;
       }
       .section-sub {
-        font-size: 1.05rem;
+        font-size: 1rem;
         color: var(--text-muted);
         max-width: 540px;
         line-height: 1.7;
-        margin-bottom: 56px;
+        margin-bottom: 48px;
       }
 
-      /* HERO */
+      /* ══════════════════════════════════════
+         HERO — BUG FIX MOBILE LAYOUT
+      ══════════════════════════════════════ */
       #hero {
-        min-height: calc(100vh - 68px);
+        min-height: calc(100vh - 64px);
         display: flex;
         align-items: center;
         padding: clamp(32px, 6vw, 80px) 5%;
         position: relative;
         overflow: hidden;
         max-width: 100%;
+        width: 100%;
       }
       .hero-inner {
         display: flex;
         align-items: center;
-        gap: 64px;
+        gap: 56px;
         width: 100%;
-        max-width: 1200px;
+        max-width: 1100px;
       }
 
+      /* Foto profil */
       .hero-photo-wrap {
         flex-shrink: 0;
         position: relative;
@@ -412,15 +491,15 @@
       }
       @keyframes spin {
         from {
-          transform: rotate(0deg);
+          transform: rotate(0);
         }
         to {
           transform: rotate(360deg);
         }
       }
       .hero-photo {
-        width: 220px;
-        height: 220px;
+        width: 200px;
+        height: 200px;
         border-radius: 50%;
         border: 3px solid var(--accent);
         object-fit: cover;
@@ -430,6 +509,7 @@
           0 0 80px var(--glow2);
       }
 
+      /* Konten hero */
       .hero-content {
         max-width: 580px;
         position: relative;
@@ -443,15 +523,14 @@
         font-size: 0.78rem;
         font-weight: 600;
         color: var(--accent);
-        letter-spacing: 0.15em;
+        letter-spacing: 0.1em;
         text-transform: uppercase;
         background: var(--tag-bg);
         border: 1px solid var(--border);
         padding: 6px 14px;
         border-radius: 50px;
-        margin-bottom: 28px;
+        margin-bottom: 24px;
         animation: fadeUp 0.6s ease both;
-        white-space: nowrap;
       }
       .hero-badge .dot {
         width: 6px;
@@ -459,6 +538,7 @@
         background: var(--accent);
         border-radius: 50%;
         animation: blink 2s ease-in-out infinite;
+        flex-shrink: 0;
       }
       @keyframes blink {
         0%,
@@ -469,19 +549,20 @@
           opacity: 0.3;
         }
       }
+
       .hero-name {
         font-family: "Syne", sans-serif;
-        font-size: clamp(2.4rem, 7vw, 5.5rem);
+        font-size: clamp(2.2rem, 6vw, 5rem);
         font-weight: 800;
         line-height: 1.05;
         letter-spacing: -0.03em;
-        margin-bottom: 24px;
+        margin-bottom: 20px;
         animation: fadeUp 0.6s 0.1s ease both;
+        word-break: break-word;
       }
       .hero-name .line {
         display: block;
         overflow: visible;
-        padding-bottom: 0.1em;
       }
       .hero-name .line span {
         display: block;
@@ -493,6 +574,7 @@
       .hero-name .accent-word {
         color: var(--accent);
       }
+
       @keyframes slideUp {
         from {
           transform: translateY(30px);
@@ -513,71 +595,83 @@
           opacity: 1;
         }
       }
+
       .hero-tagline {
         font-size: 1rem;
         color: var(--text-muted);
         line-height: 1.7;
-        margin-bottom: 32px;
+        margin-bottom: 28px;
         animation: fadeUp 0.6s 0.3s ease both;
       }
       .hero-info {
         display: flex;
         flex-wrap: wrap;
-        gap: 10px 20px;
-        margin-bottom: 36px;
+        gap: 8px 16px;
+        margin-bottom: 32px;
         animation: fadeUp 0.6s 0.4s ease both;
       }
       .hero-info-item {
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 6px;
         font-size: 0.875rem;
         color: var(--text-muted);
       }
       .hero-info-item .icon {
         color: var(--accent);
+        font-size: 0.95rem;
       }
       .hero-cta {
         display: flex;
         flex-wrap: wrap;
-        gap: 14px;
+        gap: 12px;
         animation: fadeUp 0.6s 0.5s ease both;
       }
 
+      /* ── MOBILE HERO ── */
       @media (max-width: 768px) {
         #hero {
-          padding: 40px 5% 48px;
+          padding: 36px 5% 48px;
           align-items: flex-start;
+          min-height: auto;
         }
         .hero-inner {
           flex-direction: column;
-          gap: 28px;
+          gap: 0;
           align-items: center;
+          width: 100%;
         }
-        .hero-photo {
-          width: 130px;
-          height: 130px;
-        }
-        .hero-photo-ring {
-          inset: -8px;
+        /* FIX: Foto atas, konten bawah */
+        .hero-photo-wrap {
+          order: 1;
+          margin-bottom: 24px;
         }
         .hero-content {
+          order: 2;
           width: 100%;
           max-width: 100%;
           text-align: center;
         }
-        .hero-badge {
-          font-size: 0.65rem;
-          letter-spacing: 0.08em;
-          padding: 5px 10px;
-          margin-bottom: 16px;
-          white-space: normal;
-          text-align: center;
+
+        .hero-photo {
+          width: 120px;
+          height: 120px;
         }
+        .hero-photo-ring {
+          inset: -8px;
+        }
+
+        /* FIX: Nama tidak terpotong di layar sempit */
         .hero-name {
-          font-size: clamp(2rem, 10vw, 2.8rem);
+          font-size: clamp(1.9rem, 10vw, 2.6rem);
           letter-spacing: -0.02em;
           margin-bottom: 14px;
+        }
+        .hero-badge {
+          font-size: 0.65rem;
+          letter-spacing: 0.06em;
+          padding: 5px 12px;
+          margin-bottom: 16px;
         }
         .hero-tagline {
           font-size: 0.9rem;
@@ -585,8 +679,8 @@
         }
         .hero-info {
           justify-content: center;
-          gap: 8px 14px;
-          margin-bottom: 24px;
+          gap: 6px 12px;
+          margin-bottom: 20px;
         }
         .hero-info-item {
           font-size: 0.78rem;
@@ -597,13 +691,14 @@
         .btn-primary,
         .btn-outline {
           flex: 1;
-          min-width: 140px;
+          min-width: 130px;
           justify-content: center;
-          padding: 13px 16px;
-          font-size: 0.8rem;
+          padding: 12px 14px;
+          font-size: 0.82rem;
         }
       }
 
+      /* Buttons */
       .btn-primary {
         display: inline-flex;
         align-items: center;
@@ -622,6 +717,7 @@
         transition: all 0.3s;
         position: relative;
         overflow: hidden;
+        white-space: nowrap;
       }
       .btn-primary::before {
         content: "";
@@ -656,6 +752,7 @@
         border: 1.5px solid var(--border);
         cursor: pointer;
         transition: all 0.3s;
+        white-space: nowrap;
       }
       .btn-outline:hover {
         border-color: var(--accent);
@@ -663,7 +760,7 @@
         transform: translateY(-2px);
       }
 
-      /* ABOUT */
+      /* ── ABOUT ── */
       #about {
         border-top: 1px solid var(--border);
         transition: border-color var(--transition);
@@ -677,7 +774,7 @@
       @media (max-width: 768px) {
         .about-grid {
           grid-template-columns: 1fr;
-          gap: 40px;
+          gap: 36px;
         }
       }
       .about-text p {
@@ -733,14 +830,14 @@
         color: var(--text);
       }
 
-      /* PROJECTS */
+      /* ── PROJECTS ── */
       #projects {
         border-top: 1px solid var(--border);
         transition: border-color var(--transition);
       }
       .projects-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
         gap: 24px;
         margin-top: 48px;
       }
@@ -800,7 +897,7 @@
       }
       .project-title {
         font-family: "Syne", sans-serif;
-        font-size: 1.15rem;
+        font-size: 1.1rem;
         font-weight: 800;
         color: var(--text);
         margin-bottom: 8px;
@@ -837,22 +934,16 @@
         background: var(--tag-bg);
       }
 
-      /* CONTACT */
+      /* ── CONTACT ── */
       #contact {
         border-top: 1px solid var(--border);
         transition: border-color var(--transition);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
       }
       .contact-methods {
         display: flex;
         flex-direction: column;
         gap: 14px;
         max-width: 560px;
-        margin: 0 auto;
-        align-items: center;
-        width: 100%;
       }
       .contact-item {
         display: flex;
@@ -918,21 +1009,23 @@
         box-shadow: 0 8px 32px rgba(37, 211, 102, 0.3);
       }
 
+      /* ── FOOTER ── */
       footer {
         border-top: 1px solid var(--border);
-        padding: 32px 5%;
+        padding: 28px 5%;
         display: flex;
         justify-content: space-between;
         align-items: center;
         flex-wrap: wrap;
-        gap: 16px;
+        gap: 12px;
         max-width: 1200px;
         margin: 0 auto;
+        width: 100%;
       }
       .footer-left {
         font-family: "Syne", sans-serif;
         font-weight: 700;
-        font-size: 0.9rem;
+        font-size: 0.875rem;
         color: var(--text-muted);
       }
       .footer-left span {
@@ -943,6 +1036,7 @@
         color: var(--text-dim);
       }
 
+      /* ── SCROLL REVEAL ── */
       .reveal {
         opacity: 0;
         transform: translateY(32px);
@@ -964,6 +1058,7 @@
         transition-delay: 0.3s;
       }
 
+      /* ── SCROLLBAR ── */
       ::-webkit-scrollbar {
         width: 5px;
       }
@@ -978,6 +1073,7 @@
         background: var(--accent);
       }
 
+      /* ── PAGE LOADER ── */
       .page-loader {
         position: fixed;
         inset: 0;
@@ -1022,43 +1118,49 @@
     </style>
   </head>
   <body>
+    <!-- Loader -->
     <div class="page-loader" id="loader">
-      <div class="loader-name">MA</div>
+      <div class="loader-name">MA.</div>
       <div class="loader-bar-wrap"><div class="loader-bar"></div></div>
     </div>
+
     <div class="cursor" id="cursor"></div>
     <div class="cursor-ring" id="cursorRing"></div>
     <div class="bg-mesh"></div>
 
-    <nav>
-      <a href="#hero" class="nav-logo">MA</a>
+    <!-- ══════════════════════════════════════
+         NAVBAR
+    ══════════════════════════════════════ -->
+    <nav id="navbar">
+      <a href="#hero" class="nav-logo">MA<span>.</span></a>
+
       <ul class="nav-links" id="navLinks">
         <li><a href="#about">About</a></li>
         <li><a href="#projects">Projects</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
+
       <div class="nav-right">
         <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
           <span class="theme-icon sun">☀️</span>
           <span class="theme-icon moon">🌙</span>
         </button>
-        <button class="hamburger" id="hamburger" aria-label="Menu">
+        <button
+          class="hamburger"
+          id="hamburger"
+          aria-label="Buka menu"
+          aria-expanded="false"
+        >
           <span></span><span></span><span></span>
         </button>
       </div>
     </nav>
 
     <main>
-      <!-- ═══════════════════════════════════════════
-       HERO
-  ═══════════════════════════════════════════ -->
+      <!-- HERO -->
       <section id="hero">
         <div class="hero-inner">
-          <!-- ✏️  FOTO PROFIL
-           Simpan foto kamu dengan nama "foto.jpg" di folder yang sama dengan file HTML ini.
-           Kalau nama filenya beda, ganti "foto.jpg" di bawah sesuai nama file kamu.
-           Contoh: src="profile.png" atau src="muksalmina.jpg"
-      -->
+          <!-- Foto (order:1 di mobile = muncul paling atas) -->
           <div class="hero-photo-wrap">
             <div class="hero-photo-ring"></div>
             <img
@@ -1100,9 +1202,7 @@
         </div>
       </section>
 
-      <!-- ═══════════════════════════════════════════
-       ABOUT
-  ═══════════════════════════════════════════ -->
+      <!-- ABOUT -->
       <section id="about">
         <div class="reveal">
           <div class="section-label">Tentang Saya</div>
@@ -1151,65 +1251,42 @@
         </div>
       </section>
 
-      <!-- ═══════════════════════════════════════════
-       PROJECTS
-
-       CARA MENAMBAH PROJECT:
-       1. Salin blok <div class="project-card"> ... </div> di bawah
-       2. Tempel di dalam <div class="projects-grid"> setelah project terakhir
-       3. Isi bagian berikut:
-            - project-thumb  : ganti emoji sesuai jenis project (💻 🌐 📱 🛒 🎮 📊 dll)
-            - project-tag    : label teknologi, boleh tambah <span> sebanyak perlu
-            - project-title  : nama project
-            - project-desc   : deskripsi singkat
-            - href demo      : link demo, atau hapus baris ini kalau tidak ada
-            - href github    : link GitHub, atau hapus baris ini kalau tidak ada
-  ═══════════════════════════════════════════ -->
+      <!-- PROJECTS -->
       <section id="projects">
         <div class="reveal">
           <div class="section-label">Portfolio</div>
           <h2 class="section-title">Project Saya</h2>
           <p class="section-sub">Kumpulan project yang pernah saya kerjakan.</p>
         </div>
-
         <div class="projects-grid">
-          <!-- ─────────────────────────────────────────
-           PROJECT 1  ← ganti isi sesuai projectmu
-      ───────────────────────────────────────── -->
+          <!-- PROJECT 1 — ✏️ Ganti sesuai project kamu -->
           <div class="project-card reveal reveal-delay-1">
             <div class="project-thumb">💻</div>
-            <!-- ganti emoji -->
             <div class="project-body">
               <div class="project-tags">
-                <span class="project-tag">HTML</span>
-                <!-- ganti / tambah tag -->
-                <span class="project-tag">CSS</span>
-                <span class="project-tag">JavaScript</span>
+                <span class="project-tag">HTML</span
+                ><span class="project-tag">CSS</span
+                ><span class="project-tag">JavaScript</span>
               </div>
               <div class="project-title">Nama Project 1</div>
-              <!-- ganti nama -->
               <div class="project-desc">
                 Deskripsi singkat project ini. Jelaskan apa yang dibuat dan
                 tujuannya.
               </div>
               <div class="project-links">
                 <a href="#" class="project-link">🌐 Demo</a>
-                <!-- ganti href atau hapus baris ini -->
                 <a href="#" class="project-link">🐙 GitHub</a>
-                <!-- ganti href atau hapus baris ini -->
               </div>
             </div>
           </div>
 
-          <!-- ─────────────────────────────────────────
-           PROJECT 2  ← ganti isi sesuai projectmu
-      ───────────────────────────────────────── -->
+          <!-- PROJECT 2 -->
           <div class="project-card reveal reveal-delay-2">
             <div class="project-thumb">🌐</div>
             <div class="project-body">
               <div class="project-tags">
-                <span class="project-tag">PHP</span>
-                <span class="project-tag">MySQL</span>
+                <span class="project-tag">PHP</span
+                ><span class="project-tag">MySQL</span>
               </div>
               <div class="project-title">Nama Project 2</div>
               <div class="project-desc">
@@ -1223,32 +1300,29 @@
             </div>
           </div>
 
-          <!-- ─────────────────────────────────────────
-           TAMBAH PROJECT BARU: salin blok ini
-      ─────────────────────────────────────────
-      <div class="project-card reveal reveal-delay-1">
-        <div class="project-thumb">📱</div>
-        <div class="project-body">
-          <div class="project-tags">
-            <span class="project-tag">TAG1</span>
-            <span class="project-tag">TAG2</span>
-          </div>
-          <div class="project-title">Nama Project</div>
-          <div class="project-desc">Deskripsi project kamu di sini.</div>
-          <div class="project-links">
-            <a href="https://link-demo.com" class="project-link">🌐 Demo</a>
-            <a href="https://github.com/kamu/repo" class="project-link">🐙 GitHub</a>
-          </div>
-        </div>
-      </div>
-      ───────────────────────────────────────── -->
+          <!--
+            ── TEMPLATE PROJECT BARU — salin dari sini ──
+
+            <div class="project-card reveal reveal-delay-1">
+              <div class="project-thumb">📱</div>
+              <div class="project-body">
+                <div class="project-tags">
+                  <span class="project-tag">TAG1</span>
+                  <span class="project-tag">TAG2</span>
+                </div>
+                <div class="project-title">Nama Project</div>
+                <div class="project-desc">Deskripsi project kamu di sini.</div>
+                <div class="project-links">
+                  <a href="https://link-demo.com" class="project-link">🌐 Demo</a>
+                  <a href="https://github.com/kamu/repo" class="project-link">🐙 GitHub</a>
+                </div>
+              </div>
+            </div>
+          -->
         </div>
       </section>
 
-      <!-- ═══════════════════════════════════════════
-       CONTACT
-       ✏️ Ganti setiap href dan teks kontak sesuai milikmu
-  ═══════════════════════════════════════════ -->
+      <!-- CONTACT — ✏️ Ganti semua href & teks kontak -->
       <section id="contact">
         <div class="reveal">
           <div class="section-label">Kontak</div>
@@ -1262,7 +1336,6 @@
               <div class="contact-value">muksalmina@email.com</div>
             </div>
           </a>
-
           <a
             href="https://linkedin.com/in/username"
             target="_blank"
@@ -1274,7 +1347,6 @@
               <div class="contact-value">Muksalmina Adami</div>
             </div>
           </a>
-
           <a
             href="https://github.com/muksalmina"
             target="_blank"
@@ -1286,7 +1358,6 @@
               <div class="contact-value">@muksalmina</div>
             </div>
           </a>
-
           <a
             href="https://instagram.com/muksalmina_adami"
             target="_blank"
@@ -1298,11 +1369,9 @@
               <div class="contact-value">@muksalmina_adami</div>
             </div>
           </a>
-
-          <!-- ✏️ WHATSAPP — ganti nomor (format 62xxx tanpa + dan tanpa strip) -->
+          <!-- ✏️ Ganti nomor: 628xxx (tanpa + tanpa strip) -->
           <a href="https://wa.me/628xxxxxxxxxx" target="_blank" class="wa-btn">
-            <span style="font-size: 1.4rem">💬</span>
-            Chat via WhatsApp
+            <span style="font-size: 1.4rem">💬</span> Chat via WhatsApp
           </a>
         </div>
       </section>
@@ -1314,6 +1383,7 @@
     </footer>
 
     <script>
+      /* ── PAGE LOADER ── */
       window.addEventListener("load", () => {
         setTimeout(() => {
           const l = document.getElementById("loader");
@@ -1322,6 +1392,7 @@
         }, 1400);
       });
 
+      /* ── CUSTOM CURSOR ── */
       const cursor = document.getElementById("cursor");
       const ring = document.getElementById("cursorRing");
       let mx = 0,
@@ -1354,33 +1425,59 @@
           });
         });
 
+      /* ── THEME TOGGLE ── */
       document.getElementById("themeToggle").addEventListener("click", () => {
-        const t = document.documentElement;
-        t.setAttribute(
+        const h = document.documentElement;
+        h.setAttribute(
           "data-theme",
-          t.getAttribute("data-theme") === "dark" ? "light" : "dark",
+          h.getAttribute("data-theme") === "dark" ? "light" : "dark",
         );
       });
 
-      const ham = document.getElementById("hamburger");
-      const nav = document.getElementById("navLinks");
-      ham.addEventListener("click", () => {
-        ham.classList.toggle("open");
-        nav.classList.toggle("open");
-      });
-      nav.querySelectorAll("a").forEach((a) =>
-        a.addEventListener("click", () => {
-          ham.classList.remove("open");
-          nav.classList.remove("open");
-        }),
-      );
+      /* ══════════════════════════════════════
+         HAMBURGER — BUG FIX
+         Ambil elemen dengan ID yang benar,
+         toggle class "open" di kedua elemen.
+      ══════════════════════════════════════ */
+      const hamburger = document.getElementById("hamburger");
+      const navLinks = document.getElementById("navLinks");
 
+      hamburger.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const willOpen = !navLinks.classList.contains("open");
+        hamburger.classList.toggle("open");
+        navLinks.classList.toggle("open");
+        hamburger.setAttribute("aria-expanded", willOpen);
+        hamburger.setAttribute(
+          "aria-label",
+          willOpen ? "Tutup menu" : "Buka menu",
+        );
+      });
+
+      /* Tutup saat link diklik */
+      navLinks.querySelectorAll("a").forEach((a) => {
+        a.addEventListener("click", () => {
+          hamburger.classList.remove("open");
+          navLinks.classList.remove("open");
+          hamburger.setAttribute("aria-expanded", "false");
+          hamburger.setAttribute("aria-label", "Buka menu");
+        });
+      });
+
+      /* Tutup saat klik di luar navbar */
+      document.addEventListener("click", (e) => {
+        if (!hamburger.contains(e.target) && !navLinks.contains(e.target)) {
+          hamburger.classList.remove("open");
+          navLinks.classList.remove("open");
+        }
+      });
+
+      /* ── SCROLL REVEAL ── */
       const obs = new IntersectionObserver(
-        (entries) => {
+        (entries) =>
           entries.forEach((e) => {
             if (e.isIntersecting) e.target.classList.add("in-view");
-          });
-        },
+          }),
         { threshold: 0.12 },
       );
       document.querySelectorAll(".reveal").forEach((el) => obs.observe(el));
